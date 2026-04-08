@@ -1,0 +1,13 @@
+{
+  "name": "social-engineering-training-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Flutter web frontend runner scripts",
+  "scripts": {
+    "start": "node scripts/start.js",
+    "dev": "npm run start"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3"
+  }
+}
