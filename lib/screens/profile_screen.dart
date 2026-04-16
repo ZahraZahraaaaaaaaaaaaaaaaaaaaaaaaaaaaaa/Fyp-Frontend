@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/auth_provider.dart';
+import '../theme/app_colors.dart';
 import '../widgets/main_scaffold.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -69,7 +70,7 @@ class ProfileScreen extends StatelessWidget {
             Text('Badges', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600)),
             const SizedBox(height: 8),
             if ((u?.earnedBadges ?? []).isEmpty)
-              const Text('Complete scenarios to earn badges.')
+              const Text('Complete scenarios to earn badges.', style: TextStyle(color: AppColors.textMuted))
             else
               Wrap(
                 spacing: 8,
@@ -78,6 +79,12 @@ class ProfileScreen extends StatelessWidget {
                     .map((b) => Chip(label: Text(b.replaceAll('_', ' '))))
                     .toList(),
               ),
+            const SizedBox(height: 14),
+            OutlinedButton.icon(
+              onPressed: () => context.go('/badges'),
+              icon: const Icon(Icons.workspace_premium_outlined),
+              label: const Text('Open badge gallery'),
+            ),
           ],
         ),
       ),

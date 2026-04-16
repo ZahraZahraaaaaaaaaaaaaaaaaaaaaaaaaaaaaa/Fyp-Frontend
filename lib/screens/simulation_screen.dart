@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../theme/app_colors.dart';
+
 /// Full-screen “attack consequence” UI shown after a wrong choice.
 class SimulationScreen extends StatelessWidget {
   const SimulationScreen({
@@ -135,47 +137,47 @@ class SimulationScreen extends StatelessWidget {
     switch (t) {
       case 'ransomware':
         return _SimTheme(
-          background: const Color(0xFF0B0B0B),
-          panel: const Color(0xFF1A0505),
-          accent: const Color(0xFFFF1744),
-          text: const Color(0xFFFFE0E0),
-          onAccent: Colors.black,
+          background: const Color(0xFF070B14),
+          panel: const Color(0xFF1B1220),
+          accent: AppColors.danger,
+          text: AppColors.text,
+          onAccent: Colors.white,
           icon: Icons.lock_outline,
         );
       case 'system_lock':
         return _SimTheme(
-          background: const Color(0xFF1A0000),
-          panel: const Color(0xFF2D0A0A),
-          accent: const Color(0xFFFF5252),
-          text: Colors.white,
-          onAccent: Colors.black,
+          background: const Color(0xFF070B14),
+          panel: const Color(0xFF20121A),
+          accent: AppColors.danger,
+          text: AppColors.text,
+          onAccent: Colors.white,
           icon: Icons.shield_outlined,
         );
       case 'malware':
         return _SimTheme(
-          background: const Color(0xFF120018),
-          panel: const Color(0xFF1E0A24),
-          accent: const Color(0xFFE040FB),
-          text: const Color(0xFFF3E5F5),
-          onAccent: Colors.black,
+          background: const Color(0xFF070B14),
+          panel: const Color(0xFF111B31),
+          accent: AppColors.warning,
+          text: AppColors.text,
+          onAccent: Colors.white,
           icon: Icons.bug_report_outlined,
         );
       case 'vishing_breach':
         return _SimTheme(
-          background: const Color(0xFF001018),
-          panel: const Color(0xFF0A1E28),
-          accent: const Color(0xFF00BCD4),
-          text: Colors.white,
+          background: const Color(0xFF070B14),
+          panel: const Color(0xFF0D1A2E),
+          accent: AppColors.secondary,
+          text: AppColors.text,
           onAccent: Colors.black,
           icon: Icons.phone_disabled_outlined,
         );
       case 'data_exfiltration':
       case 'impersonation_success':
         return _SimTheme(
-          background: const Color(0xFF0D1117),
-          panel: const Color(0xFF161B22),
-          accent: const Color(0xFFFFAB00),
-          text: Colors.white,
+          background: const Color(0xFF070B14),
+          panel: const Color(0xFF101C35),
+          accent: AppColors.warning,
+          text: AppColors.text,
           onAccent: Colors.black,
           icon: Icons.outbound_outlined,
         );
@@ -183,11 +185,11 @@ class SimulationScreen extends StatelessWidget {
       case 'unauthorized_login':
       default:
         return _SimTheme(
-          background: const Color(0xFF1B0000),
-          panel: const Color(0xFF2A0E0E),
-          accent: const Color(0xFFFF5252),
-          text: const Color(0xFFFFEBEE),
-          onAccent: Colors.black,
+          background: const Color(0xFF070B14),
+          panel: const Color(0xFF1A1220),
+          accent: AppColors.danger,
+          text: AppColors.text,
+          onAccent: Colors.white,
           icon: Icons.gpp_maybe_outlined,
         );
     }

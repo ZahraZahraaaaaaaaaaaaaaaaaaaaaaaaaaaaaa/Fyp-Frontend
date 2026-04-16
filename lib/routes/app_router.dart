@@ -6,6 +6,7 @@ import '../providers/auth_provider.dart';
 import '../screens/admin_dashboard_screen.dart';
 import '../screens/admin_scenarios_screen.dart';
 import '../screens/analytics_screen.dart';
+import '../screens/badges_screen.dart';
 import '../screens/dashboard_screen.dart';
 import '../screens/login_screen.dart';
 import '../screens/profile_screen.dart';
@@ -66,6 +67,10 @@ GoRouter createRouter(AuthProvider auth) {
       GoRoute(
         path: '/profile',
         builder: (context, state) => const ProfileScreen(),
+      ),
+      GoRoute(
+        path: '/badges',
+        builder: (context, state) => const BadgesScreen(),
       ),
       GoRoute(
         path: '/admin',

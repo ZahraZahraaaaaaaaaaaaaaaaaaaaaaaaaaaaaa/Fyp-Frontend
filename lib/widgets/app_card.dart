@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../theme/app_colors.dart';
+
 class AppCard extends StatelessWidget {
   const AppCard({
     super.key,
@@ -15,8 +17,9 @@ class AppCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final card = Card(
-      elevation: 1,
+      elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      color: AppColors.surface,
       child: Padding(padding: padding, child: child),
     );
     if (onTap == null) return card;

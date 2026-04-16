@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../services/api_service.dart';
 import '../widgets/app_card.dart';
+import '../theme/app_colors.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -55,14 +56,39 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  Container(
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(14),
+                      gradient: const LinearGradient(colors: [AppColors.primary, AppColors.secondary]),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.primary.withValues(alpha: 0.22),
+                          blurRadius: 28,
+                          offset: const Offset(0, 12),
+                        ),
+                      ],
+                    ),
+                    child: const Row(
+                      children: [
+                        Icon(Icons.shield_outlined, color: Colors.white),
+                        SizedBox(width: 10),
+                        Text(
+                          'Cybersecurity Awareness Training',
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 18),
                   Text(
-                    'Interactive Training',
+                    'Sign in',
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Social engineering awareness simulations',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.black54),
+                    'Access your dashboard and continue simulations.',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textMuted),
                   ),
                   const SizedBox(height: 24),
                   TextField(
@@ -78,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   if (_error != null) ...[
                     const SizedBox(height: 12),
-                    Text(_error!, style: const TextStyle(color: Colors.red)),
+                    Text(_error!, style: const TextStyle(color: AppColors.danger)),
                   ],
                   const SizedBox(height: 20),
                   FilledButton(

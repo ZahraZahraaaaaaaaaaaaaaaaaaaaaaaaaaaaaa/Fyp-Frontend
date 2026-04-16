@@ -22,6 +22,8 @@ class _ScenarioPlayScreenState extends State<ScenarioPlayScreen> {
   ScenarioModel? _scenario;
   String? _attemptId;
   int _currentStepNumber = 1;
+  int _currentStepIndex = 0;
+  List<int> _stepOrder = const [];
   int _score = 0;
   int _correct = 0;
   int _incorrect = 0;
@@ -57,6 +59,10 @@ class _ScenarioPlayScreenState extends State<ScenarioPlayScreen> {
       final a = start['attempt'] as Map<String, dynamic>;
       _attemptId = a['id']?.toString();
       _currentStepNumber = (a['currentStepNumber'] as num?)?.toInt() ?? 1;
+      _currentStepIndex = (a['currentStepIndex'] as num?)?.toInt() ?? 0;
+      _stepOrder = (a['stepOrder'] as List<dynamic>? ?? const [])
+          .map((e) => (e as num).toInt())
+          .toList(growable: false);
       _score = (a['score'] as num?)?.toInt() ?? 0;
       _correct = (a['correctDecisions'] as num?)?.toInt() ?? 0;
       _incorrect = (a['incorrectDecisions'] as num?)?.toInt() ?? 0;
@@ -83,6 +89,10 @@ class _ScenarioPlayScreenState extends State<ScenarioPlayScreen> {
       _correct = (attempt['correctDecisions'] as num?)?.toInt() ?? _correct;
       _incorrect = (attempt['incorrectDecisions'] as num?)?.toInt() ?? _incorrect;
       _currentStepNumber = (attempt['currentStepNumber'] as num?)?.toInt() ?? _currentStepNumber;
+      _currentStepIndex = (attempt['currentStepIndex'] as num?)?.toInt() ?? _currentStepIndex;
+      _stepOrder = (attempt['stepOrder'] as List<dynamic>? ?? _stepOrder)
+          .map((e) => (e as num).toInt())
+          .toList(growable: false);
 
       final sim = res['simulation'] as Map<String, dynamic>? ?? {};
       final fb = res['feedback'] as Map<String, dynamic>? ?? {};
@@ -119,9 +129,12 @@ class _ScenarioPlayScreenState extends State<ScenarioPlayScreen> {
 
       final end = fb['isScenarioEnd'] == true;
       if (end && mounted) {
+        final beforeBadges = (context.read<AuthProvider>().user?.earnedBadges ?? const <String>[]).toSet();
         final complete = await api.completeAttempt(aid);
         if (!mounted) return;
         await context.read<AuthProvider>().refreshProfile();
+        final afterBadges = (context.read<AuthProvider>().user?.earnedBadges ?? const <String>[]).toSet();
+        final newlyEarned = afterBadges.difference(beforeBadges).toList()..sort();
         final att = complete['attempt'] as Map<String, dynamic>? ?? {};
         final summary = complete['summary'] as Map<String, dynamic>? ?? {};
         if (!mounted) return;
@@ -130,9 +143,12 @@ class _ScenarioPlayScreenState extends State<ScenarioPlayScreen> {
             builder: (_) => ResultScreen(
               scenarioTitle: _scenario?.title ?? 'Scenario',
               score: (att['score'] as num?)?.toInt() ?? _score,
+              maxScore: (att['maxScore'] as num?)?.toInt() ?? 0,
+              normalizedScore: (att['normalizedScore'] as num?)?.toInt() ?? 0,
               correct: (summary['correctDecisions'] as num?)?.toInt() ?? _correct,
               incorrect: _incorrect,
               perfectRun: summary['perfectRun'] == true,
+              earnedBadges: newlyEarned,
               onDone: () {
                 context.go('/scenarios');
               },
@@ -168,9 +184,8 @@ class _ScenarioPlayScreenState extends State<ScenarioPlayScreen> {
     }
     final scenario = _scenario!;
     final step = _step;
-    final total = scenario.steps.length;
-    final idx = scenario.steps.indexWhere((s) => s.stepNumber == step?.stepNumber);
-    final progress = total == 0 ? 0.0 : (idx + 1) / total;
+    final total = _stepOrder.isNotEmpty ? _stepOrder.length : scenario.steps.length;
+    final progress = total == 0 ? 0.0 : (_currentStepIndex + 1) / total;
 
     return Scaffold(
       appBar: AppBar(
@@ -196,9 +211,18 @@ class _ScenarioPlayScreenState extends State<ScenarioPlayScreen> {
               children: [
                 LinearProgressIndicator(value: progress.clamp(0, 1)),
                 const SizedBox(height: 8),
-                Text(
-                  step?.contextLabel ?? 'Step',
-                  style: Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.black54),
+                Row(
+                  children: [
+                    Text(
+                      step?.contextLabel ?? 'Step',
+                      style: Theme.of(context).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w600),
+                    ),
+                    const Spacer(),
+                    Text(
+                      '${_currentStepIndex + 1}/$total',
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -209,18 +233,13 @@ class _ScenarioPlayScreenState extends State<ScenarioPlayScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Simulation',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
-                  ),
-                  const SizedBox(height: 8),
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF5F5F5),
+                      color: const Color(0xFF101C35),
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.black12),
+                      border: Border.all(color: const Color(0xFF1D2A47)),
                     ),
                     child: SelectableText(
                       step?.content ?? '',
@@ -228,7 +247,7 @@ class _ScenarioPlayScreenState extends State<ScenarioPlayScreen> {
                         fontFamily: 'monospace',
                         fontSize: 14,
                         height: 1.45,
-                        color: Colors.grey.shade900,
+                        color: Colors.white.withValues(alpha: 0.92),
                       ),
                     ),
                   ),
@@ -252,7 +271,13 @@ class _ScenarioPlayScreenState extends State<ScenarioPlayScreen> {
                               padding: const EdgeInsets.all(16),
                             ),
                             onPressed: _submitting ? null : () => _onPick(i),
-                            child: Text(step.options[i].optionText),
+                            child: Row(
+                              children: [
+                                const Icon(Icons.chevron_right),
+                                const SizedBox(width: 8),
+                                Expanded(child: Text(step.options[i].optionText)),
+                              ],
+                            ),
                           ),
                         ),
                       );

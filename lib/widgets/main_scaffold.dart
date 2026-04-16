@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../theme/app_colors.dart';
+
 class MainScaffold extends StatelessWidget {
   const MainScaffold({
     super.key,
@@ -21,21 +23,48 @@ class MainScaffold extends StatelessWidget {
         actions: actions,
       ),
       drawer: Drawer(
+        backgroundColor: AppColors.surface,
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            const DrawerHeader(
+            DrawerHeader(
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Color(0xFF0D47A1), Color(0xFF1565C0)],
+                color: AppColors.surface,
+                border: Border(
+                  bottom: BorderSide(color: AppColors.border.withValues(alpha: 0.9)),
                 ),
               ),
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: Text(
-                  'SE Awareness Lab',
-                  style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      gradient: const LinearGradient(colors: [AppColors.primary, AppColors.secondary]),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.primary.withValues(alpha: 0.22),
+                          blurRadius: 24,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
+                    ),
+                    child: const Icon(Icons.shield_outlined, color: Colors.white),
+                  ),
+                  const SizedBox(height: 12),
+                  const Text(
+                    'Cyber Awareness',
+                    style: TextStyle(color: AppColors.text, fontSize: 18, fontWeight: FontWeight.w800),
+                  ),
+                  const SizedBox(height: 4),
+                  const Text(
+                    'Social engineering training',
+                    style: TextStyle(color: AppColors.textMuted),
+                  ),
+                ],
               ),
             ),
             ListTile(
@@ -52,6 +81,14 @@ class MainScaffold extends StatelessWidget {
               onTap: () {
                 Navigator.pop(context);
                 context.go('/scenarios');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.workspace_premium_outlined),
+              title: const Text('Achievements'),
+              onTap: () {
+                Navigator.pop(context);
+                context.go('/badges');
               },
             ),
             ListTile(

@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/auth_provider.dart';
+import '../theme/app_colors.dart';
 import '../widgets/main_scaffold.dart';
 
 class DashboardScreen extends StatelessWidget {
@@ -27,7 +28,7 @@ class DashboardScreen extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               'Learn by making decisions inside realistic simulations. Wrong choices show immediate consequences.',
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.black54),
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.textMuted),
             ),
             const SizedBox(height: 24),
             LayoutBuilder(
@@ -38,19 +39,19 @@ class DashboardScreen extends StatelessWidget {
                     title: 'Total score',
                     value: '${u?.totalScore ?? 0}',
                     icon: Icons.stars_outlined,
-                    color: const Color(0xFF1565C0),
+                    color: AppColors.primary,
                   ),
                   _StatCard(
                     title: 'Level',
                     value: '${u?.level ?? 1}',
                     icon: Icons.trending_up,
-                    color: const Color(0xFF2E7D32),
+                    color: AppColors.success,
                   ),
                   _StatCard(
                     title: 'Badges',
                     value: '${u?.earnedBadges.length ?? 0}',
                     icon: Icons.military_tech_outlined,
-                    color: const Color(0xFF6A1B9A),
+                    color: AppColors.secondary,
                   ),
                 ];
                 if (wide) {
@@ -78,6 +79,11 @@ class DashboardScreen extends StatelessWidget {
                   onPressed: () => context.go('/scenarios'),
                   icon: const Icon(Icons.play_circle_outline),
                   label: const Text('Start scenarios'),
+                ),
+                OutlinedButton.icon(
+                  onPressed: () => context.go('/badges'),
+                  icon: const Icon(Icons.workspace_premium_outlined),
+                  label: const Text('View achievements'),
                 ),
                 OutlinedButton.icon(
                   onPressed: () => context.go('/analytics'),

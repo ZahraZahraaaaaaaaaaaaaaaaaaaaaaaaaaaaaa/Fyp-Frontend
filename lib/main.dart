@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'providers/auth_provider.dart';
 import 'routes/app_router.dart';
 import 'services/api_service.dart';
+import 'theme/app_theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,13 +31,9 @@ class SocialEngineeringApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final base = ThemeData(
-      colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF1565C0)),
-      useMaterial3: true,
-    );
     return MaterialApp.router(
-      title: 'SE Awareness Lab',
-      theme: base,
+      title: 'Cybersecurity Awareness Training',
+      theme: buildAppTheme(),
       routerConfig: router,
     );
   }
