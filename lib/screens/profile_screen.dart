@@ -16,15 +16,6 @@ class ProfileScreen extends StatelessWidget {
 
     return MainScaffold(
       title: 'Profile',
-      actions: [
-        TextButton(
-          onPressed: () async {
-            await auth.logout();
-            if (context.mounted) context.go('/login');
-          },
-          child: const Text('Logout'),
-        ),
-      ],
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(

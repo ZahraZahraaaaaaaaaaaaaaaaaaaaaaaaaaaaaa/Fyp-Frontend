@@ -66,7 +66,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(14),
-                      gradient: const LinearGradient(colors: [AppColors.primary, AppColors.secondary]),
+                      gradient: const LinearGradient(colors: [AppColors.primary, AppColors.accentTeal]),
                       boxShadow: [
                         BoxShadow(
                           color: AppColors.primary.withValues(alpha: 0.22),

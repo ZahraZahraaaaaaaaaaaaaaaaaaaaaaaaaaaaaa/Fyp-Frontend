@@ -5,6 +5,11 @@ import 'package:provider/provider.dart';
 import '../models/scenario_model.dart';
 import '../providers/auth_provider.dart';
 import '../services/api_service.dart';
+import '../theme/app_colors.dart';
+import '../theme/design_tokens.dart';
+import '../utils/scenario_red_flags.dart';
+import '../widgets/figma_progress_bar.dart';
+import '../widgets/figma_shell_card.dart';
 import 'feedback_screen.dart';
 import 'result_screen.dart';
 import 'simulation_screen.dart';
@@ -185,108 +190,294 @@ class _ScenarioPlayScreenState extends State<ScenarioPlayScreen> {
     final scenario = _scenario!;
     final step = _step;
     final total = _stepOrder.isNotEmpty ? _stepOrder.length : scenario.steps.length;
-    final progress = total == 0 ? 0.0 : (_currentStepIndex + 1) / total;
+    final progressPct = total == 0 ? 0.0 : ((_currentStepIndex + 1) / total * 100);
+
+    final hints = redFlagsForScenarioType(scenario.type);
+
+    Widget mainColumn() {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Simulation',
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+          ),
+          const SizedBox(height: 10),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppColors.surface2,
+              borderRadius: BorderRadius.circular(DesignTokens.radiusMd),
+              border: Border.all(color: AppColors.border),
+            ),
+            child: SelectableText(
+              step?.content ?? '',
+              style: const TextStyle(
+                fontFamily: 'monospace',
+                fontSize: 14,
+                height: 1.45,
+                color: AppColors.text,
+              ),
+            ),
+          ),
+          const SizedBox(height: 18),
+          Text(
+            'What should you do?',
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800),
+          ),
+          const SizedBox(height: 10),
+          if (step == null)
+            const Text('No step found.')
+          else
+            ...List.generate(step.options.length, (i) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                      backgroundColor: AppColors.surface2,
+                      side: const BorderSide(color: AppColors.border, width: 1.5),
+                      foregroundColor: AppColors.text,
+                    ),
+                    onPressed: _submitting ? null : () => _onPick(i),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(top: 2),
+                          child: Icon(Icons.radio_button_unchecked, size: 18, color: AppColors.textMuted),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(child: Text(step.options[i].optionText)),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            }),
+        ],
+      );
+    }
+
+    Widget sidebar() {
+      return FigmaShellCard(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.warning_amber_rounded, color: AppColors.warning, size: 22),
+                const SizedBox(width: 8),
+                Text(
+                  'Red flags to consider',
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            for (final line in hints) ...[
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 6,
+                    height: 6,
+                    margin: const EdgeInsets.only(top: 6),
+                    decoration: const BoxDecoration(color: AppColors.danger, shape: BoxShape.circle),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(line, style: const TextStyle(color: AppColors.textMuted, height: 1.35, fontSize: 13)),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+            ],
+            const SizedBox(height: 6),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: AppColors.primary.withValues(alpha: 0.08),
+                borderRadius: BorderRadius.circular(DesignTokens.radiusMd),
+                border: Border.all(color: AppColors.primary.withValues(alpha: 0.25)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  Text('Pro tip', style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.w800)),
+                  SizedBox(height: 6),
+                  Text(
+                    'When in doubt, verify through a trusted channel (official portal, internal directory, or known callback number) before clicking, transferring, or sharing data.',
+                    style: TextStyle(color: AppColors.textMuted, height: 1.35, fontSize: 13),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(scenario.title),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => context.go('/scenarios'),
+        ),
+        title: Text(scenario.title, maxLines: 1, overflow: TextOverflow.ellipsis),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 12),
-            child: Center(
-              child: Text(
-                '$_score pts',
-                style: const TextStyle(fontWeight: FontWeight.w600),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.only(right: 12),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                decoration: BoxDecoration(
+                  color: AppColors.surface2,
+                  borderRadius: BorderRadius.circular(999),
+                  border: Border.all(color: AppColors.border),
+                ),
+                child: Text(
+                  '$_score pts',
+                  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
+                ),
               ),
             ),
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                LinearProgressIndicator(value: progress.clamp(0, 1)),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Text(
-                      step?.contextLabel ?? 'Step',
-                      style: Theme.of(context).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w600),
-                    ),
-                    const Spacer(),
-                    Text(
-                      '${_currentStepIndex + 1}/$total',
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF101C35),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: const Color(0xFF1D2A47)),
-                    ),
-                    child: SelectableText(
-                      step?.content ?? '',
-                      style: TextStyle(
-                        fontFamily: 'monospace',
-                        fontSize: 14,
-                        height: 1.45,
-                        color: Colors.white.withValues(alpha: 0.92),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    'What do you do?',
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
-                  ),
-                  const SizedBox(height: 12),
-                  if (step == null)
-                    const Text('No step found.')
-                  else
-                    ...List.generate(step.options.length, (i) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              alignment: Alignment.centerLeft,
-                              padding: const EdgeInsets.all(16),
+      body: LayoutBuilder(
+        builder: (context, c) {
+          final wide = c.maxWidth >= 960;
+          return SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+            child: wide
+                ? Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            _metaRow(context, scenario),
+                            const SizedBox(height: 12),
+                            FigmaShellCard(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'Step ${_currentStepIndex + 1} of $total',
+                                        style: const TextStyle(color: AppColors.textMuted, fontWeight: FontWeight.w600),
+                                      ),
+                                      const Spacer(),
+                                      Text(
+                                        step?.contextLabel ?? '',
+                                        style: const TextStyle(color: AppColors.textMuted, fontSize: 12),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 10),
+                                  FigmaProgressBar(
+                                    progress: progressPct,
+                                    color: FigmaProgressColor.primary,
+                                  ),
+                                ],
+                              ),
                             ),
-                            onPressed: _submitting ? null : () => _onPick(i),
-                            child: Row(
+                            const SizedBox(height: 14),
+                            mainColumn(),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(child: sidebar()),
+                    ],
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _metaRow(context, scenario),
+                      const SizedBox(height: 12),
+                      FigmaShellCard(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
                               children: [
-                                const Icon(Icons.chevron_right),
-                                const SizedBox(width: 8),
-                                Expanded(child: Text(step.options[i].optionText)),
+                                Text(
+                                  'Step ${_currentStepIndex + 1} of $total',
+                                  style: const TextStyle(color: AppColors.textMuted, fontWeight: FontWeight.w600),
+                                ),
+                                const Spacer(),
+                                Text(
+                                  step?.contextLabel ?? '',
+                                  style: const TextStyle(color: AppColors.textMuted, fontSize: 12),
+                                ),
                               ],
                             ),
-                          ),
+                            const SizedBox(height: 10),
+                            FigmaProgressBar(
+                              progress: progressPct,
+                              color: FigmaProgressColor.primary,
+                            ),
+                          ],
                         ),
-                      );
-                    }),
-                ],
-              ),
-            ),
-          ),
-        ],
+                      ),
+                      const SizedBox(height: 14),
+                      mainColumn(),
+                      const SizedBox(height: 16),
+                      sidebar(),
+                    ],
+                  ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _metaRow(BuildContext context, ScenarioModel scenario) {
+    Color diff(String d) {
+      switch (d) {
+        case 'beginner':
+          return AppColors.success;
+        case 'intermediate':
+          return AppColors.warning;
+        case 'advanced':
+          return AppColors.danger;
+        default:
+          return AppColors.textMuted;
+      }
+    }
+
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: [
+        _chip(context, scenario.type.toUpperCase(), AppColors.primary),
+        _chip(context, scenario.difficulty, diff(scenario.difficulty)),
+        _chip(context, '~${scenario.estimatedTime} min', AppColors.textMuted),
+      ],
+    );
+  }
+
+  Widget _chip(BuildContext context, String text, Color c) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: AppColors.surface2,
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: AppColors.border),
+      ),
+      child: Text(
+        text,
+        style: TextStyle(color: c, fontWeight: FontWeight.w700, fontSize: 13),
       ),
     );
   }

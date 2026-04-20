@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../badges/badge_catalog.dart';
 import '../theme/app_colors.dart';
@@ -197,7 +198,7 @@ class ResultScreen extends StatelessWidget {
                   runSpacing: 12,
                   children: [
                     FilledButton.icon(
-                      onPressed: onDone,
+                      onPressed: () => context.go('/home'),
                       icon: const Icon(Icons.dashboard_outlined),
                       label: const Text('Back to dashboard'),
                     ),

@@ -103,7 +103,7 @@ class _MedalFace extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: gradient.length >= 2 ? gradient : [AppColors.primary, AppColors.secondary],
+          colors: gradient.length >= 2 ? gradient : [AppColors.primary, AppColors.accentTeal],
         ),
         boxShadow: [
           BoxShadow(
@@ -150,7 +150,7 @@ class _RibbonPainter extends CustomPainter {
       ..shader = LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
-        colors: gradient.length >= 2 ? gradient : [AppColors.secondary, AppColors.primary],
+        colors: gradient.length >= 2 ? gradient : [AppColors.accentTeal, AppColors.primary],
       ).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
 
     final w = size.width;

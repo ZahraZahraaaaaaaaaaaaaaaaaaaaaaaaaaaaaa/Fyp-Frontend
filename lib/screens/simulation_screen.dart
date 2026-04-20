@@ -166,7 +166,7 @@ class SimulationScreen extends StatelessWidget {
         return _SimTheme(
           background: const Color(0xFF070B14),
           panel: const Color(0xFF0D1A2E),
-          accent: AppColors.secondary,
+          accent: AppColors.accentTeal,
           text: AppColors.text,
           onAccent: Colors.black,
           icon: Icons.phone_disabled_outlined,

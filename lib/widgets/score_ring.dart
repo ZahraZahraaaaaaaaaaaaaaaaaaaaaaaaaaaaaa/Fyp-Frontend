@@ -91,7 +91,7 @@ class _RingPainter extends CustomPainter {
       ..shader = LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
-        colors: [color, AppColors.secondary],
+        colors: [color, AppColors.accentTeal],
       ).createShader(Rect.fromCircle(center: center, radius: radius));
 
     const start = -math.pi / 2;

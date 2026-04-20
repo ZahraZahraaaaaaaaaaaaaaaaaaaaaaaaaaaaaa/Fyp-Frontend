@@ -3,17 +3,20 @@ import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 import '../theme/design_tokens.dart';
 
-class AppCard extends StatelessWidget {
-  const AppCard({
+/// Card styling aligned with `figma_ui/src/components/Card.tsx` (dark surfaces).
+class FigmaShellCard extends StatelessWidget {
+  const FigmaShellCard({
     super.key,
     required this.child,
+    this.padding = const EdgeInsets.all(20),
     this.onTap,
-    this.padding = const EdgeInsets.all(16),
+    this.hoverLift = false,
   });
 
   final Widget child;
-  final VoidCallback? onTap;
   final EdgeInsets padding;
+  final VoidCallback? onTap;
+  final bool hoverLift;
 
   @override
   Widget build(BuildContext context) {
