@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+enum BadgeRarity { common, rare, epic, legendary }
+
+enum BadgeCategory { foundational, scenario, performance, mastery }
+
 class BadgeDefinition {
   const BadgeDefinition({
     required this.id,
@@ -9,6 +13,11 @@ class BadgeDefinition {
     required this.icon,
     required this.faceGradient,
     required this.ribbonGradient,
+    required this.category,
+    required this.rarity,
+    required this.progressText,
+    required this.points,
+    required this.accentColor,
   });
 
   final String id;
@@ -18,6 +27,11 @@ class BadgeDefinition {
   final IconData icon;
   final List<Color> faceGradient;
   final List<Color> ribbonGradient;
+  final BadgeCategory category;
+  final BadgeRarity rarity;
+  final String progressText;
+  final int points;
+  final Color accentColor;
 }
 
 class BadgeCatalog {
@@ -41,6 +55,11 @@ class BadgeCatalog {
       icon: Icons.shield_outlined,
       faceGradient: [Color(0xFF1B2A4A), Color(0xFF2B6CFF)],
       ribbonGradient: [Color(0xFF0EA5E9), Color(0xFF22D3EE)],
+      category: BadgeCategory.foundational,
+      rarity: BadgeRarity.common,
+      progressText: 'Complete introduction module',
+      points: 180,
+      accentColor: Color(0xFF52E5A3),
     ),
     BadgeDefinition(
       id: firstScenario,
@@ -50,6 +69,11 @@ class BadgeCatalog {
       icon: Icons.verified_outlined,
       faceGradient: [Color(0xFF172554), Color(0xFF2B6CFF)],
       ribbonGradient: [Color(0xFF2B6CFF), Color(0xFF60A5FA)],
+      category: BadgeCategory.foundational,
+      rarity: BadgeRarity.common,
+      progressText: '1/1 scenario success',
+      points: 220,
+      accentColor: Color(0xFF8DA4FF),
     ),
     BadgeDefinition(
       id: phishingDetector,
@@ -59,6 +83,11 @@ class BadgeCatalog {
       icon: Icons.mark_email_read_outlined,
       faceGradient: [Color(0xFF0F2C3E), Color(0xFF22D3EE)],
       ribbonGradient: [Color(0xFF1D4ED8), Color(0xFF22D3EE)],
+      category: BadgeCategory.scenario,
+      rarity: BadgeRarity.rare,
+      progressText: 'Flag 5 phishing emails',
+      points: 380,
+      accentColor: Color(0xFFFFB946),
     ),
     BadgeDefinition(
       id: vishingAware,
@@ -68,6 +97,11 @@ class BadgeCatalog {
       icon: Icons.phone_in_talk_outlined,
       faceGradient: [Color(0xFF102A43), Color(0xFF38BDF8)],
       ribbonGradient: [Color(0xFF06B6D4), Color(0xFF2B6CFF)],
+      category: BadgeCategory.scenario,
+      rarity: BadgeRarity.rare,
+      progressText: 'Required module level 3',
+      points: 360,
+      accentColor: Color(0xFF2A3E67),
     ),
     BadgeDefinition(
       id: baitingBlocker,
@@ -77,6 +111,11 @@ class BadgeCatalog {
       icon: Icons.usb_outlined,
       faceGradient: [Color(0xFF1F2937), Color(0xFF22C55E)],
       ribbonGradient: [Color(0xFF16A34A), Color(0xFF22D3EE)],
+      category: BadgeCategory.scenario,
+      rarity: BadgeRarity.rare,
+      progressText: 'Security path level 2',
+      points: 340,
+      accentColor: Color(0xFF2A3E67),
     ),
     BadgeDefinition(
       id: impersonationDefender,
@@ -86,6 +125,11 @@ class BadgeCatalog {
       icon: Icons.admin_panel_settings_outlined,
       faceGradient: [Color(0xFF1F2937), Color(0xFFFFB020)],
       ribbonGradient: [Color(0xFF2B6CFF), Color(0xFFFFB020)],
+      category: BadgeCategory.scenario,
+      rarity: BadgeRarity.rare,
+      progressText: 'Deny unauthorized entry',
+      points: 420,
+      accentColor: Color(0xFF67EDB0),
     ),
     BadgeDefinition(
       id: safeStreak,
@@ -95,6 +139,11 @@ class BadgeCatalog {
       icon: Icons.local_fire_department_outlined,
       faceGradient: [Color(0xFF111827), Color(0xFF22D3EE)],
       ribbonGradient: [Color(0xFF2B6CFF), Color(0xFF22D3EE)],
+      category: BadgeCategory.performance,
+      rarity: BadgeRarity.epic,
+      progressText: '7-day hot streak',
+      points: 520,
+      accentColor: Color(0xFFF66CA0),
     ),
     BadgeDefinition(
       id: perfectScore,
@@ -104,6 +153,11 @@ class BadgeCatalog {
       icon: Icons.emoji_events_outlined,
       faceGradient: [Color(0xFF0B1220), Color(0xFFFFB020)],
       ribbonGradient: [Color(0xFFFFB020), Color(0xFF22D3EE)],
+      category: BadgeCategory.performance,
+      rarity: BadgeRarity.epic,
+      progressText: '100/100 evaluation',
+      points: 600,
+      accentColor: Color(0xFFFFC54D),
     ),
     BadgeDefinition(
       id: scenarioMaster,
@@ -113,6 +167,11 @@ class BadgeCatalog {
       icon: Icons.auto_awesome_outlined,
       faceGradient: [Color(0xFF0B1220), Color(0xFF60A5FA)],
       ribbonGradient: [Color(0xFF2B6CFF), Color(0xFF22D3EE)],
+      category: BadgeCategory.mastery,
+      rarity: BadgeRarity.legendary,
+      progressText: 'Complete all scenarios',
+      points: 760,
+      accentColor: Color(0xFF2A3E67),
     ),
     BadgeDefinition(
       id: securityChampion,
@@ -122,6 +181,11 @@ class BadgeCatalog {
       icon: Icons.workspace_premium_outlined,
       faceGradient: [Color(0xFF0B1220), Color(0xFF9CA3AF)],
       ribbonGradient: [Color(0xFF2B6CFF), Color(0xFF9CA3AF)],
+      category: BadgeCategory.mastery,
+      rarity: BadgeRarity.legendary,
+      progressText: 'Archive global rank: top 12%',
+      points: 900,
+      accentColor: Color(0xFF2A3E67),
     ),
   ];
 
