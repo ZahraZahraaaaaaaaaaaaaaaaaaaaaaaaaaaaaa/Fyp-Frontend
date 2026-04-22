@@ -106,23 +106,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     accent: AppColors.warning,
                   ),
                 ];
-                final cols = c.maxWidth > 1180 ? 3 : 1;
                 const gap = 12.0;
-                if (cols == 1) {
-                  return Column(
+                const minCardWidth = 230.0;
+                final idealWidth = (c.maxWidth - (2 * gap)) / 3;
+                final cardWidth = idealWidth < minCardWidth ? minCardWidth : idealWidth;
+
+                return SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
                     children: [
                       for (var i = 0; i < cards.length; i++) ...[
-                        cards[i],
-                        if (i != cards.length - 1) const SizedBox(height: gap),
+                        SizedBox(width: cardWidth, child: cards[i]),
+                        if (i != cards.length - 1) const SizedBox(width: gap),
                       ],
                     ],
-                  );
-                }
-                final width = (c.maxWidth - (2 * gap)) / 3;
-                return Wrap(
-                  spacing: gap,
-                  runSpacing: gap,
-                  children: cards.map((card) => SizedBox(width: width, child: card)).toList(),
+                  ),
                 );
               },
             ),
