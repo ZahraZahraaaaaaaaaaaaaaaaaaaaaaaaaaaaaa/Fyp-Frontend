@@ -267,10 +267,10 @@ class _ScenariosHeader extends StatelessWidget {
             borderRadius: BorderRadius.circular(14),
             border: Border.all(color: AppColors.border),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
                 children: [
                   const Text('YOUR PROGRESS', style: TextStyle(fontSize: 10, color: AppColors.textMuted, fontWeight: FontWeight.w700)),
                   const Spacer(),
@@ -309,8 +309,8 @@ class _ScenariosHeader extends StatelessWidget {
 
         return Row(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
+                              children: [
+                                Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -364,7 +364,7 @@ class _CategoryTab extends StatelessWidget {
                 ]
               : null,
         ),
-        child: Text(
+                                  child: Text(
           label,
           style: TextStyle(
             color: active ? Colors.white : AppColors.textMuted,
@@ -458,9 +458,9 @@ class _ScenarioGridCardState extends State<_ScenarioGridCard> {
                       border: Border.all(color: AppColors.border),
                     ),
                     child: Text('~ ${s.estimatedTime} min', style: const TextStyle(fontSize: 10, color: AppColors.textMuted, fontWeight: FontWeight.w700)),
-                  ),
-                ],
-              ),
+                                ),
+                              ],
+                            ),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(12, 12, 12, 10),
@@ -482,7 +482,7 @@ class _ScenarioGridCardState extends State<_ScenarioGridCard> {
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
                   ),
-                  const SizedBox(height: 8),
+                            const SizedBox(height: 8),
                   Text(
                     s.description,
                     maxLines: 3,
@@ -492,17 +492,17 @@ class _ScenarioGridCardState extends State<_ScenarioGridCard> {
                   const SizedBox(height: 12),
                   Container(height: 1, color: AppColors.border.withValues(alpha: 0.7)),
                   const SizedBox(height: 10),
-                  Row(
-                    children: [
+                            Row(
+                              children: [
                       Expanded(
                         child: Row(
                           children: [
                             const Icon(Icons.bolt, size: 14, color: AppColors.accentTeal),
-                            const SizedBox(width: 4),
+                                const SizedBox(width: 4),
                             Text('$xp XP', style: const TextStyle(color: AppColors.textMuted, fontSize: 11)),
                             const SizedBox(width: 10),
                             Icon(widget.done ? Icons.check_circle : Icons.flag_outlined, size: 14, color: widget.done ? AppColors.success : AppColors.textMuted),
-                            const SizedBox(width: 4),
+                                const SizedBox(width: 4),
                             Text(widget.done ? 'Completed' : 'Pending', style: const TextStyle(color: AppColors.textMuted, fontSize: 11)),
                           ],
                         ),
@@ -606,7 +606,7 @@ class _DailyChallengeBanner extends StatelessWidget {
             child: const Text('Claim Daily Bonus'),
           ),
         ],
-      ),
+                ),
     );
   }
 }
