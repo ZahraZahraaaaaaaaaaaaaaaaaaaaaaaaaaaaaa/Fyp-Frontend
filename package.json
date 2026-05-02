@@ -5,7 +5,9 @@
   "description": "Flutter web frontend runner scripts",
   "scripts": {
     "start": "node scripts/start.js",
-    "dev": "npm run start"
+    "dev": "npm run start",
+    "build": "node scripts/build-web.js",
+    "build:web": "node scripts/build-web.js"
   },
   "dependencies": {
     "dotenv": "^17.2.3"

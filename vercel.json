@@ -1,4 +1,7 @@
 {
+  "installCommand": "npm install",
+  "buildCommand": "bash scripts/vercel-flutter-build.sh",
+  "outputDirectory": "build/web",
   "rewrites": [
     {
       "source": "/(.*)",
