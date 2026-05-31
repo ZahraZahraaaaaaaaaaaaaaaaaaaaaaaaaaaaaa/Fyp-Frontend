@@ -15,8 +15,10 @@ if [[ ! -x "${FLUTTER_DIR}/bin/flutter" ]]; then
 fi
 
 export PATH="${FLUTTER_DIR}/bin:${PATH}"
+export CI=true
 
 cd "${ROOT}"
+flutter config --no-analytics >/dev/null 2>&1 || true
 flutter precache --web
 flutter pub get
 flutter build web --release --dart-define=API_BASE="${API_BASE_URL}"

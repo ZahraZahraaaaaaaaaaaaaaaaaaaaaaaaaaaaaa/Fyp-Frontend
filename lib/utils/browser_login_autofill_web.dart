@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'dart:html' as html;
-import 'dart:js' as js;
-import 'dart:js_util' as js_util;
 
 import 'package:flutter/services.dart';
 
@@ -21,7 +19,7 @@ void _tagLoginInputs() {
 
   for (final node in html.document.querySelectorAll('input')) {
     if (node is! html.InputElement) continue;
-    final type = node.type.toLowerCase();
+    final type = (node.type ?? '').toLowerCase();
     if (type == 'password') {
       passwordInput = node;
     } else if (type == 'email' || type == 'text' || type.isEmpty) {
@@ -44,34 +42,12 @@ void _tagLoginInputs() {
   }
 }
 
-/// Signals a successful login to Flutter autofill + browser credential APIs.
+/// Signals a successful login to Flutter autofill (browser may offer to save password).
 Future<void> onLoginSuccessForBrowser({
   required String email,
   required String password,
 }) async {
   TextInput.finishAutofillContext(shouldSave: true);
-  await _storeViaCredentialManagementApi(email, password);
   // Keep login route visible briefly so Chrome can show "Save password?"
   await Future<void>.delayed(const Duration(milliseconds: 450));
-}
-
-Future<void> _storeViaCredentialManagementApi(String email, String password) async {
-  if (!js.context.hasProperty('PasswordCredential')) return;
-  try {
-    final cred = js.JsObject(
-      js.context['PasswordCredential'],
-      [
-        js.JsObject.jsify({
-          'id': email,
-          'password': password,
-          'name': email,
-        }),
-      ],
-    );
-    final credentials = js.context['navigator']['credentials'];
-    if (credentials == null) return;
-    await js_util.promiseToFuture(js_util.callMethod(credentials, 'store', [cred]));
-  } catch (_) {
-    // User dismissed, unsupported context, or browser policy — Flutter autofill may still work.
-  }
 }
