@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/auth_provider.dart';
 import '../providers/dashboard_provider.dart';
 import '../services/api_service.dart';
+import '../utils/browser_login_autofill.dart';
 import '../theme/app_colors.dart';
 import '../theme/design_tokens.dart';
 
@@ -26,24 +26,37 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _rememberDevice = true;
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      prepareLoginFieldsForBrowser();
+    });
+  }
+
+  @override
   void dispose() {
     _email.dispose();
     _password.dispose();
+    _emailFocus.dispose();
+    _passwordFocus.dispose();
     super.dispose();
   }
 
   Future<void> _submit() async {
-    FocusScope.of(context).unfocus();
     if (!_formKey.currentState!.validate()) return;
+    final email = _email.text.trim();
+    final password = _password.text;
     setState(() {
       _error = null;
       _loading = true;
     });
     try {
-      await context.read<AuthProvider>().login(_email.text.trim(), _password.text);
+      await context.read<AuthProvider>().login(email, password);
+      if (!mounted) return;
+      await onLoginSuccessForBrowser(email: email, password: password);
       await context.read<DashboardProvider>().load(context.read<ApiService>());
       if (!mounted) return;
-      TextInput.finishAutofillContext(shouldSave: true);
+      _passwordFocus.unfocus();
       context.go('/home');
     } on ApiException catch (e) {
       setState(() => _error = e.message);
@@ -111,6 +124,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                       formKey: _formKey,
                                       email: _email,
                                       password: _password,
+                                      emailFocus: _emailFocus,
+                                      passwordFocus: _passwordFocus,
                                       obscurePassword: _obscurePassword,
                                       rememberDevice: _rememberDevice,
                                       loading: _loading,
@@ -192,6 +207,8 @@ class _LoginCard extends StatelessWidget {
     required this.formKey,
     required this.email,
     required this.password,
+    required this.emailFocus,
+    required this.passwordFocus,
     required this.obscurePassword,
     required this.rememberDevice,
     required this.loading,
@@ -205,6 +222,8 @@ class _LoginCard extends StatelessWidget {
   final GlobalKey<FormState> formKey;
   final TextEditingController email;
   final TextEditingController password;
+  final FocusNode emailFocus;
+  final FocusNode passwordFocus;
   final bool obscurePassword;
   final bool rememberDevice;
   final bool loading;
@@ -224,86 +243,89 @@ class _LoginCard extends StatelessWidget {
         border: Border.all(color: AppColors.border),
         boxShadow: DesignTokens.shadowCard(Colors.black),
       ),
-      child: Form(
-        key: formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              'Sign in to your account',
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
-            ),
-            const SizedBox(height: 6),
-            const Text(
-              'Enter your credentials to access the lab.',
-              style: TextStyle(color: AppColors.textMuted),
-            ),
-            const SizedBox(height: 18),
-            AutofillGroup(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+      child: AutofillGroup(
+        child: Form(
+          key: formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                'Sign in to your account',
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
+              ),
+              const SizedBox(height: 6),
+              const Text(
+                'Enter your credentials to access the lab.',
+                style: TextStyle(color: AppColors.textMuted),
+              ),
+              const SizedBox(height: 18),
+              const Text(
+                'Work Email',
+                style: TextStyle(color: AppColors.textMuted, fontSize: 12, fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(height: 6),
+              TextFormField(
+                controller: email,
+                focusNode: emailFocus,
+                keyboardType: TextInputType.emailAddress,
+                textInputAction: TextInputAction.next,
+                autofillHints: const [AutofillHints.email, AutofillHints.username],
+                autocorrect: false,
+                enableSuggestions: true,
+                restorationId: 'login_email',
+                onTap: () => prepareLoginFieldsForBrowser(),
+                onEditingComplete: () => passwordFocus.requestFocus(),
+                validator: (v) {
+                  final value = (v ?? '').trim();
+                  if (value.isEmpty) return 'Email is required';
+                  if (!value.contains('@')) return 'Enter a valid email';
+                  return null;
+                },
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                  hintText: 'name@company.com',
+                  prefixIcon: Icon(Icons.mail_outline),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Row(
                 children: [
                   const Text(
-                    'Work Email',
+                    'Password',
                     style: TextStyle(color: AppColors.textMuted, fontSize: 12, fontWeight: FontWeight.w600),
                   ),
-                  const SizedBox(height: 6),
-                  TextFormField(
-                    controller: email,
-                    keyboardType: TextInputType.emailAddress,
-                    textInputAction: TextInputAction.next,
-                    autofillHints: const [AutofillHints.email, AutofillHints.username],
-                    autocorrect: false,
-                    enableSuggestions: true,
-                    validator: (v) {
-                      final value = (v ?? '').trim();
-                      if (value.isEmpty) return 'Email is required';
-                      if (!value.contains('@')) return 'Enter a valid email';
-                      return null;
-                    },
-                    decoration: const InputDecoration(
-                      hintText: 'name@company.com',
-                      prefixIcon: Icon(Icons.mail_outline),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Row(
-                    children: [
-                      const Text(
-                        'Password',
-                        style: TextStyle(color: AppColors.textMuted, fontSize: 12, fontWeight: FontWeight.w600),
-                      ),
-                      const Spacer(),
-                      TextButton(
-                        onPressed: null,
-                        child: const Text('Forgot password?'),
-                      ),
-                    ],
-                  ),
-                  TextFormField(
-                    controller: password,
-                    obscureText: obscurePassword,
-                    textInputAction: TextInputAction.done,
-                    autofillHints: const [AutofillHints.password],
-                    autocorrect: false,
-                    enableSuggestions: false,
-                    onFieldSubmitted: loading ? null : (_) => onSubmit(),
-                    validator: (v) => (v == null || v.isEmpty) ? 'Password is required' : null,
-                    decoration: InputDecoration(
-                      hintText: '••••••••',
-                      prefixIcon: const Icon(Icons.lock_outline),
-                      suffixIcon: IconButton(
-                        tooltip: obscurePassword ? 'Show password' : 'Hide password',
-                        onPressed: onTogglePassword,
-                        icon: Icon(
-                          obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                        ),
-                      ),
-                    ),
+                  const Spacer(),
+                  TextButton(
+                    onPressed: null,
+                    child: const Text('Forgot password?'),
                   ),
                 ],
               ),
-            ),
+              TextFormField(
+                controller: password,
+                focusNode: passwordFocus,
+                obscureText: obscurePassword,
+                textInputAction: TextInputAction.done,
+                autofillHints: const [AutofillHints.password],
+                autocorrect: false,
+                enableSuggestions: false,
+                restorationId: 'login_password',
+                onTap: () => prepareLoginFieldsForBrowser(),
+                onFieldSubmitted: loading ? null : (_) => onSubmit(),
+                validator: (v) => (v == null || v.isEmpty) ? 'Password is required' : null,
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  hintText: '••••••••',
+                  prefixIcon: const Icon(Icons.lock_outline),
+                  suffixIcon: IconButton(
+                    tooltip: obscurePassword ? 'Show password' : 'Hide password',
+                    onPressed: onTogglePassword,
+                    icon: Icon(
+                      obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                    ),
+                  ),
+                ),
+              ),
             const SizedBox(height: 4),
             Row(
               children: [
@@ -316,24 +338,25 @@ class _LoginCard extends StatelessWidget {
               Text(error!, style: const TextStyle(color: AppColors.danger)),
             ],
             const SizedBox(height: 8),
-            FilledButton(
-              onPressed: loading ? null : onSubmit,
-              style: FilledButton.styleFrom(
-                minimumSize: const Size(double.infinity, 48),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              FilledButton(
+                onPressed: loading ? null : onSubmit,
+                style: FilledButton.styleFrom(
+                  minimumSize: const Size(double.infinity, 48),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+                child: loading
+                    ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                    : const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Sign in'),
+                          SizedBox(width: 8),
+                          Icon(Icons.arrow_forward),
+                        ],
+                      ),
               ),
-              child: loading
-                  ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                  : const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Sign in'),
-                        SizedBox(width: 8),
-                        Icon(Icons.arrow_forward),
-                      ],
-                    ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
