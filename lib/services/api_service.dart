@@ -120,6 +120,8 @@ class ApiService {
 
   Future<Map<String, dynamic>> me() => get('/api/auth/me');
 
+  Future<Map<String, dynamic>> dashboardMe() => get('/api/dashboard/me');
+
   Future<List<dynamic>> scenarios() async {
     final res = await _client.get(_u('/api/scenarios'), headers: _headers());
     final raw = _decodeRaw(res);

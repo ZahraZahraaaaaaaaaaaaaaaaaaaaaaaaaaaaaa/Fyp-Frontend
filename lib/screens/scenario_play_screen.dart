@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../models/scenario_model.dart';
 import '../providers/auth_provider.dart';
+import '../providers/dashboard_provider.dart';
 import '../services/api_service.dart';
 import '../theme/app_colors.dart';
 import '../theme/design_tokens.dart';
@@ -138,6 +139,7 @@ class _ScenarioPlayScreenState extends State<ScenarioPlayScreen> {
         final complete = await api.completeAttempt(aid);
         if (!mounted) return;
         await context.read<AuthProvider>().refreshProfile();
+        await context.read<DashboardProvider>().load(api);
         final afterBadges = (context.read<AuthProvider>().user?.earnedBadges ?? const <String>[]).toSet();
         final newlyEarned = afterBadges.difference(beforeBadges).toList()..sort();
         final att = complete['attempt'] as Map<String, dynamic>? ?? {};

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../badges/badge_catalog.dart';
 import '../models/scenario_model.dart';
 import '../providers/auth_provider.dart';
+import '../providers/dashboard_provider.dart';
 import '../services/api_service.dart';
 import '../theme/app_colors.dart';
 import '../theme/design_tokens.dart';
@@ -18,42 +19,78 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  int _totalScenarios = 0;
-  List<ScenarioModel> _scenarios = [];
-  bool _loadingMeta = true;
+  String? _trackedUserId;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _loadMeta());
+    WidgetsBinding.instance.addPostFrameCallback((_) => _refreshDashboard());
   }
 
-  Future<void> _loadMeta() async {
-    final api = context.read<ApiService>();
-    try {
-      final raw = await api.scenarios();
-      final list = raw.map((e) => ScenarioModel.fromJson(e as Map<String, dynamic>)).toList();
-      if (!mounted) return;
-      setState(() {
-        _totalScenarios = list.length;
-        _scenarios = list;
-        _loadingMeta = false;
-      });
-    } catch (_) {
-      if (mounted) setState(() => _loadingMeta = false);
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final userId = context.read<AuthProvider>().user?.id;
+    if (userId != _trackedUserId) {
+      _trackedUserId = userId;
+      WidgetsBinding.instance.addPostFrameCallback((_) => _refreshDashboard());
     }
+  }
+
+  Future<void> _refreshDashboard() async {
+    final auth = context.read<AuthProvider>();
+    if (!auth.isAuthenticated) return;
+    await context.read<DashboardProvider>().load(context.read<ApiService>());
   }
 
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
+    final dash = context.watch<DashboardProvider>();
     final u = auth.user;
-    final completed = u?.completedScenarios.length ?? 0;
-    final progressPct = _totalScenarios > 0 ? (completed / _totalScenarios).clamp(0, 1).toDouble() : 0.0;
-    final pending = (_totalScenarios - completed).clamp(0, _totalScenarios);
-    final recommended = _recommendedScenario(u?.completedScenarios ?? const []);
-    final earned = u?.earnedBadges ?? const <String>[];
-    final rank = _rankLabel(u?.level ?? 1);
+    final snap = dash.snapshot;
+
+    if (dash.loading && snap == null) {
+      return const MainScaffold(
+        title: 'Dashboard',
+        sidebarCtaLabel: 'Deploy Mission',
+        sidebarCtaRoute: '/scenarios',
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (snap == null) {
+      return MainScaffold(
+        title: 'Dashboard',
+        sidebarCtaLabel: 'Deploy Mission',
+        sidebarCtaRoute: '/scenarios',
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('Unable to load dashboard data.', style: TextStyle(color: AppColors.textMuted)),
+              if (dash.error != null) ...[
+                const SizedBox(height: 8),
+                Text(dash.error!, style: const TextStyle(color: AppColors.textMuted, fontSize: 12)),
+              ],
+              const SizedBox(height: 16),
+              FilledButton(onPressed: _refreshDashboard, child: const Text('Retry')),
+            ],
+          ),
+        ),
+      );
+    }
+
+    final totalScenarios = snap.totalScenariosCount;
+    final completed = snap.completedScenariosCount;
+    final completedIds = snap.completedScenarios;
+    final scenarios = dash.scenarios;
+    final progressPct =
+        totalScenarios > 0 ? (completed / totalScenarios).clamp(0, 1).toDouble() : 0.0;
+    final pending = snap.remainingScenariosCount;
+    final recommended = _recommendedScenario(scenarios, completedIds);
+    final earned = snap.earnedBadges;
+    final rank = _rankLabel(snap.level);
 
     return MainScaffold(
       title: 'Dashboard',
@@ -72,7 +109,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Welcome back, ${u?.fullName ?? 'Agent Smith'}',
+                        'Welcome back, ${u?.fullName ?? 'Operator'}',
                         style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
                       ),
                       const SizedBox(height: 6),
@@ -110,14 +147,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 final cards = [
                   _SummaryCard(
                     label: 'TOTAL SCORE',
-                    value: '${u?.totalScore ?? 0}',
-                    hint: _loadingMeta ? 'Loading...' : '+${((u?.totalScore ?? 0) * 0.12).round()} from last briefing',
+                    value: '${snap.totalScore}',
+                    hint: 'Lifetime training score',
                     icon: Icons.query_stats_outlined,
                     accent: AppColors.primary,
                   ),
                   _SummaryCard(
                     label: 'CURRENT LEVEL',
-                    value: '${u?.level ?? 1}',
+                    value: '${snap.level}',
                     hint: '${(progressPct * 100).round()}% completion',
                     icon: Icons.stars_rounded,
                     accent: const Color(0xFFAEEA94),
@@ -125,15 +162,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                   _SummaryCard(
                     label: 'SCENARIOS',
-                    value: _loadingMeta ? '…' : '$completed/$_totalScenarios',
+                    value: '$completed/$totalScenarios',
                     hint: '$pending modules remaining',
                     icon: Icons.shield_outlined,
                     accent: AppColors.secondary,
                   ),
                   _SummaryCard(
                     label: 'ACHIEVEMENTS',
-                    value: '${earned.length}',
-                    hint: '${earned.isEmpty ? 0 : (earned.length <= 2 ? earned.length : 2)} new unlocks',
+                    value: '${snap.earnedBadgesCount}',
+                    hint: earned.isEmpty ? 'No badges earned yet' : '${earned.length} badge${earned.length == 1 ? '' : 's'} earned',
                     icon: Icons.military_tech_outlined,
                     accent: AppColors.warning,
                   ),
@@ -171,8 +208,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             const SizedBox(height: 14),
                             _LearningPathCard(
                               completed: completed,
-                              total: _totalScenarios,
-                              activeScenario: recommended?.title ?? 'Advanced Phishing Defense',
+                              total: totalScenarios,
+                              activeScenario: recommended?.title ?? 'No active scenarios',
                             ),
                           ],
                         ),
@@ -197,8 +234,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     const SizedBox(height: 14),
                     _LearningPathCard(
                       completed: completed,
-                      total: _totalScenarios,
-                      activeScenario: recommended?.title ?? 'Advanced Phishing Defense',
+                      total: totalScenarios,
+                      activeScenario: recommended?.title ?? 'No active scenarios',
                     ),
                     const SizedBox(height: 14),
                     _BadgePreviewRail(
@@ -215,12 +252,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  ScenarioModel? _recommendedScenario(List<String> completedIds) {
-    if (_scenarios.isEmpty) return null;
-    for (final s in _scenarios) {
+  ScenarioModel? _recommendedScenario(List<ScenarioModel> scenarios, List<String> completedIds) {
+    if (scenarios.isEmpty) return null;
+    for (final s in scenarios) {
       if (!completedIds.contains(s.id)) return s;
     }
-    return _scenarios.first;
+    return scenarios.first;
   }
 
   String _rankLabel(int level) {
@@ -418,11 +455,11 @@ class _LearningPathCard extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           _PathRow(
-            done: true,
-            active: true,
+            done: completed > 0,
+            active: completed == 0,
             tag: 'BASIC TRAINING',
             title: 'Security Fundamentals 101',
-            meta: completed > 0 ? 'Score: 90' : '',
+            meta: completed > 0 ? 'Completed' : '',
           ),
           const SizedBox(height: 10),
           _PathRow(

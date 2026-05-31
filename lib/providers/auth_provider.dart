@@ -5,9 +5,11 @@ import '../models/user_model.dart';
 import '../services/api_service.dart';
 
 class AuthProvider extends ChangeNotifier {
-  AuthProvider(this._api);
+  AuthProvider(this._api, {void Function()? onSessionCleared})
+      : _onSessionCleared = onSessionCleared;
 
   final ApiService _api;
+  final void Function()? _onSessionCleared;
   static const _kToken = 'jwt_token';
 
   String? _token;
@@ -41,8 +43,7 @@ class AuthProvider extends ChangeNotifier {
     final t = res['token'] as String?;
     if (t == null) throw Exception('No token');
     await _persistToken(t);
-    _user = UserModel.fromJson(res['user'] as Map<String, dynamic>);
-    notifyListeners();
+    await refreshProfile();
   }
 
   Future<void> register({
@@ -58,8 +59,7 @@ class AuthProvider extends ChangeNotifier {
     final t = res['token'] as String?;
     if (t == null) throw Exception('No token');
     await _persistToken(t);
-    _user = UserModel.fromJson(res['user'] as Map<String, dynamic>);
-    notifyListeners();
+    await refreshProfile();
   }
 
   Future<void> refreshProfile() async {
@@ -81,6 +81,7 @@ class AuthProvider extends ChangeNotifier {
     _api.setToken(null);
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_kToken);
+    _onSessionCleared?.call();
     notifyListeners();
   }
 }

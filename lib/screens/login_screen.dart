@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/auth_provider.dart';
+import '../providers/dashboard_provider.dart';
 import '../services/api_service.dart';
 import '../theme/app_colors.dart';
 import '../theme/design_tokens.dart';
@@ -39,6 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
     });
     try {
       await context.read<AuthProvider>().login(_email.text.trim(), _password.text);
+      await context.read<DashboardProvider>().load(context.read<ApiService>());
       if (mounted) context.go('/home');
     } on ApiException catch (e) {
       setState(() => _error = e.message);
