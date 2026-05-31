@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -17,8 +18,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _email = TextEditingController(text: 'user@training.local');
-  final _password = TextEditingController(text: 'User123!');
+  final _email = TextEditingController();
+  final _password = TextEditingController();
   String? _error;
   bool _loading = false;
   bool _obscurePassword = true;
@@ -41,7 +42,9 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       await context.read<AuthProvider>().login(_email.text.trim(), _password.text);
       await context.read<DashboardProvider>().load(context.read<ApiService>());
-      if (mounted) context.go('/home');
+      if (!mounted) return;
+      TextInput.finishAutofillContext(shouldSave: true);
+      context.go('/home');
     } on ApiException catch (e) {
       setState(() => _error = e.message);
     } catch (e) {
@@ -236,45 +239,69 @@ class _LoginCard extends StatelessWidget {
               style: TextStyle(color: AppColors.textMuted),
             ),
             const SizedBox(height: 18),
-            const Text('Work Email', style: TextStyle(color: AppColors.textMuted, fontSize: 12, fontWeight: FontWeight.w600)),
-            const SizedBox(height: 6),
-            TextFormField(
-              controller: email,
-              keyboardType: TextInputType.emailAddress,
-              validator: (v) {
-                final value = (v ?? '').trim();
-                if (value.isEmpty) return 'Email is required';
-                if (!value.contains('@')) return 'Enter a valid email';
-                return null;
-              },
-              decoration: const InputDecoration(
-                hintText: 'name@company.com',
-                prefixIcon: Icon(Icons.mail_outline),
-              ),
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                const Text('Password', style: TextStyle(color: AppColors.textMuted, fontSize: 12, fontWeight: FontWeight.w600)),
-                const Spacer(),
-                TextButton(
-                  onPressed: null,
-                  child: const Text('Forgot password?'),
-                ),
-              ],
-            ),
-            TextFormField(
-              controller: password,
-              obscureText: obscurePassword,
-              validator: (v) => (v == null || v.isEmpty) ? 'Password is required' : null,
-              decoration: InputDecoration(
-                hintText: '••••••••',
-                prefixIcon: const Icon(Icons.lock_outline),
-                suffixIcon: IconButton(
-                  tooltip: obscurePassword ? 'Show password' : 'Hide password',
-                  onPressed: onTogglePassword,
-                  icon: Icon(obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined),
-                ),
+            AutofillGroup(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const Text(
+                    'Work Email',
+                    style: TextStyle(color: AppColors.textMuted, fontSize: 12, fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 6),
+                  TextFormField(
+                    controller: email,
+                    keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.next,
+                    autofillHints: const [AutofillHints.email, AutofillHints.username],
+                    autocorrect: false,
+                    enableSuggestions: true,
+                    validator: (v) {
+                      final value = (v ?? '').trim();
+                      if (value.isEmpty) return 'Email is required';
+                      if (!value.contains('@')) return 'Enter a valid email';
+                      return null;
+                    },
+                    decoration: const InputDecoration(
+                      hintText: 'name@company.com',
+                      prefixIcon: Icon(Icons.mail_outline),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      const Text(
+                        'Password',
+                        style: TextStyle(color: AppColors.textMuted, fontSize: 12, fontWeight: FontWeight.w600),
+                      ),
+                      const Spacer(),
+                      TextButton(
+                        onPressed: null,
+                        child: const Text('Forgot password?'),
+                      ),
+                    ],
+                  ),
+                  TextFormField(
+                    controller: password,
+                    obscureText: obscurePassword,
+                    textInputAction: TextInputAction.done,
+                    autofillHints: const [AutofillHints.password],
+                    autocorrect: false,
+                    enableSuggestions: false,
+                    onFieldSubmitted: loading ? null : (_) => onSubmit(),
+                    validator: (v) => (v == null || v.isEmpty) ? 'Password is required' : null,
+                    decoration: InputDecoration(
+                      hintText: '••••••••',
+                      prefixIcon: const Icon(Icons.lock_outline),
+                      suffixIcon: IconButton(
+                        tooltip: obscurePassword ? 'Show password' : 'Hide password',
+                        onPressed: onTogglePassword,
+                        icon: Icon(
+                          obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 4),
