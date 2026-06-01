@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../theme/app_colors.dart';
 import '../theme/design_tokens.dart';
+import 'notification_bell.dart';
 
 /// App shell inspired by `figma_ui/src/components/EmployeeNavbar.tsx` + drawer for small widths.
 class MainScaffold extends StatelessWidget {
@@ -74,6 +75,7 @@ class MainScaffold extends StatelessWidget {
               ),
               actions: [
                 if (actions != null) ...actions!,
+                const NotificationBell(compact: true),
                 IconButton(
                   tooltip: 'Profile',
                   onPressed: () => context.go('/profile'),
@@ -192,6 +194,8 @@ class _DesktopTopBar extends StatelessWidget {
         children: [
           Text(title, style: const TextStyle(color: AppColors.textMuted, fontWeight: FontWeight.w700)),
           const Spacer(),
+          const NotificationBell(),
+          const SizedBox(width: 4),
           CircleAvatar(
             radius: 14,
             backgroundColor: AppColors.surface2,

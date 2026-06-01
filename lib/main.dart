@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'providers/auth_provider.dart';
 import 'providers/dashboard_provider.dart';
+import 'providers/notification_provider.dart';
 import 'routes/app_router.dart';
 import 'services/api_service.dart';
 import 'theme/app_theme.dart';
@@ -12,8 +13,18 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final api = ApiService();
   final dashboard = DashboardProvider();
-  final auth = AuthProvider(api, onSessionCleared: dashboard.reset);
+  final notifications = NotificationProvider(api);
+  final auth = AuthProvider(
+    api,
+    onSessionCleared: () {
+      dashboard.reset();
+      notifications.reset();
+    },
+  );
   await auth.hydrate();
+  if (auth.isAuthenticated) {
+    await notifications.load();
+  }
   final router = createRouter(auth);
   runApp(
     MultiProvider(
@@ -21,6 +32,7 @@ Future<void> main() async {
         Provider<ApiService>.value(value: api),
         ChangeNotifierProvider<DashboardProvider>.value(value: dashboard),
         ChangeNotifierProvider<AuthProvider>.value(value: auth),
+        ChangeNotifierProvider<NotificationProvider>.value(value: notifications),
       ],
       child: SocialEngineeringApp(router: router),
     ),

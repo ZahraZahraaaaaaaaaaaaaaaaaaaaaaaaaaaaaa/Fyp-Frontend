@@ -74,6 +74,15 @@ class ApiService {
     return map;
   }
 
+  Future<Map<String, dynamic>> patch(String path) async {
+    final res = await _client.patch(_u(path), headers: _headers(jsonBody: true));
+    final map = await _decodeMap(res);
+    if (res.statusCode >= 400) {
+      throw ApiException(map['message']?.toString() ?? 'Error', res.statusCode);
+    }
+    return map;
+  }
+
   Future<Map<String, dynamic>> put(
     String path,
     Map<String, dynamic> body,
@@ -119,6 +128,14 @@ class ApiService {
   }
 
   Future<Map<String, dynamic>> me() => get('/api/auth/me');
+
+  Future<Map<String, dynamic>> fetchNotifications() => get('/api/notifications');
+
+  Future<Map<String, dynamic>> markNotificationRead(String id) =>
+      patch('/api/notifications/$id/read');
+
+  Future<Map<String, dynamic>> markAllNotificationsRead() =>
+      post('/api/notifications/read-all', {});
 
   Future<Map<String, dynamic>> dashboardMe() => get('/api/dashboard/me');
 

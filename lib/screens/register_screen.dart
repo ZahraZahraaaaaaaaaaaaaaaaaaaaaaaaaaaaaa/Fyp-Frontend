@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/auth_provider.dart';
 import '../providers/dashboard_provider.dart';
+import '../providers/notification_provider.dart';
 import '../services/api_service.dart';
 import '../widgets/app_card.dart';
 import '../theme/app_colors.dart';
@@ -42,6 +43,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             password: _password.text,
           );
       await context.read<DashboardProvider>().load(context.read<ApiService>());
+      await context.read<NotificationProvider>().load(force: true);
       if (mounted) context.go('/home');
     } on ApiException catch (e) {
       setState(() => _error = e.message);
