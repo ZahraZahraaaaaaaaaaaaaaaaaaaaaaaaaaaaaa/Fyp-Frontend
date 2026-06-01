@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'design_tokens.dart';
 import 'theme_palette.dart';
 
 /// Brand accents (shared across themes) + semantic colors from [palette].
@@ -29,6 +30,19 @@ class AppColors {
   static Color get toggleTrack => _palette.toggleTrack;
   static Color get lockedCardStart => _palette.lockedCardStart;
   static Color get lockedCardEnd => _palette.lockedCardEnd;
+
+  /// Card / panel background for badge gallery tiles.
+  static Color get badgeCardUnlocked => _palette.surface;
+
+  static Color get badgeCardLocked => _palette.surface2;
+
+  /// Icon on colorful badge medallion (readable on gradients in both themes).
+  static Color get badgeMedalIcon => isDark ? const Color(0xFF081020) : Colors.white;
+
+  static List<BoxShadow> get cardShadow => DesignTokens.shadowCard(
+        cardShadowBase,
+        alpha: isDark ? 0.35 : 0.1,
+      );
 
   static const Color primary = Color(0xFF1A73E8);
   static const Color primaryDark = Color(0xFF1557B0);

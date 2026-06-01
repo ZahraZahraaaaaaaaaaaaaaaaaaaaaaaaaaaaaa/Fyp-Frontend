@@ -137,8 +137,8 @@ class SimulationScreen extends StatelessWidget {
     switch (t) {
       case 'ransomware':
         return _SimTheme(
-          background: const Color(0xFF070B14),
-          panel: const Color(0xFF1B1220),
+          background: AppColors.bg,
+          panel: AppColors.surface2,
           accent: AppColors.danger,
           text: AppColors.text,
           onAccent: Colors.white,
@@ -146,8 +146,8 @@ class SimulationScreen extends StatelessWidget {
         );
       case 'system_lock':
         return _SimTheme(
-          background: const Color(0xFF070B14),
-          panel: const Color(0xFF20121A),
+          background: AppColors.bg,
+          panel: AppColors.surface2,
           accent: AppColors.danger,
           text: AppColors.text,
           onAccent: Colors.white,
@@ -155,8 +155,8 @@ class SimulationScreen extends StatelessWidget {
         );
       case 'malware':
         return _SimTheme(
-          background: const Color(0xFF070B14),
-          panel: const Color(0xFF111B31),
+          background: AppColors.bg,
+          panel: AppColors.surface2,
           accent: AppColors.warning,
           text: AppColors.text,
           onAccent: Colors.white,
@@ -164,8 +164,8 @@ class SimulationScreen extends StatelessWidget {
         );
       case 'vishing_breach':
         return _SimTheme(
-          background: const Color(0xFF070B14),
-          panel: const Color(0xFF0D1A2E),
+          background: AppColors.bg,
+          panel: AppColors.surface2,
           accent: AppColors.accentTeal,
           text: AppColors.text,
           onAccent: Colors.black,
@@ -174,8 +174,8 @@ class SimulationScreen extends StatelessWidget {
       case 'data_exfiltration':
       case 'impersonation_success':
         return _SimTheme(
-          background: const Color(0xFF070B14),
-          panel: const Color(0xFF101C35),
+          background: AppColors.bg,
+          panel: AppColors.surface2,
           accent: AppColors.warning,
           text: AppColors.text,
           onAccent: Colors.black,

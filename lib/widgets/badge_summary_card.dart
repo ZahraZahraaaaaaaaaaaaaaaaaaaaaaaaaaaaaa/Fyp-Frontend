@@ -22,12 +22,15 @@ class BadgeSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeInOut,
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: const Color(0xFF0F1D3D),
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(color: AppColors.border),
+        boxShadow: AppColors.cardShadow,
       ),
       child: Row(
         children: [
@@ -50,7 +53,13 @@ class BadgeSummaryCard extends StatelessWidget {
               children: [
                 Text(title, style: TextStyle(fontSize: 11, color: AppColors.textMuted, fontWeight: FontWeight.w700)),
                 const SizedBox(height: 4),
-                Text(value, style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800)),
+                Text(
+                  value,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.text,
+                      ),
+                ),
                 const SizedBox(height: 2),
                 Text(subtitle, style: TextStyle(fontSize: 11, color: AppColors.textMuted)),
               ],
@@ -89,7 +98,7 @@ class _ProgressRing extends StatelessWidget {
           Center(
             child: Text(
               '${(progress * 100).round()}%',
-              style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700),
+              style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: AppColors.text),
             ),
           ),
         ],

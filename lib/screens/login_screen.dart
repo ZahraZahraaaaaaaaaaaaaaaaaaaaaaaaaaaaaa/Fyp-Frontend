@@ -251,7 +251,7 @@ class _LoginCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(18),
         border: Border.all(color: AppColors.border),
-        boxShadow: DesignTokens.shadowCard(Colors.black),
+        boxShadow: AppColors.cardShadow,
       ),
       child: AutofillGroup(
         child: Form(

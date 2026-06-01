@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../badges/badge_catalog.dart';
 import '../providers/auth_provider.dart';
+import '../providers/theme_provider.dart';
 import '../theme/app_colors.dart';
 import '../widgets/badge_gallery_card.dart';
 import '../widgets/badge_summary_card.dart';
@@ -13,6 +14,7 @@ class BadgesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<ThemeProvider>();
     final auth = context.watch<AuthProvider>();
     final earned = (auth.user?.earnedBadges ?? const <String>[]).toSet();
     final totalBadges = BadgeCatalog.all.length;

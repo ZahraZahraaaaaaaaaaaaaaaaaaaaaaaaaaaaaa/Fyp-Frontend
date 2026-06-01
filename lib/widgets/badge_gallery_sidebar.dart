@@ -27,9 +27,9 @@ class BadgeGallerySidebar extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'The Kinetic Archive',
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800, color: Color(0xFF9CB6FF)),
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800, color: AppColors.primary),
           ),
           const SizedBox(height: 14),
           const Text('The Archive', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
@@ -44,7 +44,7 @@ class BadgeGallerySidebar extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: const Color(0xFF0D1E3B),
+              color: AppColors.surface2,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: AppColors.primary.withValues(alpha: 0.35)),
             ),

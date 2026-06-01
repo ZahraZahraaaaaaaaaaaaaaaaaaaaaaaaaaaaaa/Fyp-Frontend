@@ -434,7 +434,7 @@ class _ScenarioGridCardState extends State<_ScenarioGridCard> {
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: _hover ? AppColors.primary.withValues(alpha: 0.5) : AppColors.border),
-          boxShadow: _hover ? DesignTokens.shadowCardHover(AppColors.primary) : DesignTokens.shadowCard(Colors.black),
+          boxShadow: _hover ? DesignTokens.shadowCardHover(AppColors.primary) : AppColors.cardShadow,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

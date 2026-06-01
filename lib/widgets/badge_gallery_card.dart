@@ -33,17 +33,27 @@ class _BadgeGalleryCardState extends State<BadgeGalleryCard> {
         transform: Matrix4.identity()..translate(0.0, _hovered ? -3 : 0),
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: unlocked ? const Color(0xFF111E3F) : const Color(0xFF0A1227),
+          gradient: unlocked
+              ? null
+              : LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [AppColors.lockedCardStart, AppColors.lockedCardEnd],
+                ),
+          color: unlocked ? AppColors.badgeCardUnlocked : null,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: unlocked ? b.accentColor.withValues(alpha: 0.35) : AppColors.border.withValues(alpha: 0.85),
           ),
           boxShadow: [
-            BoxShadow(
-              color: unlocked ? b.accentColor.withValues(alpha: _hovered ? 0.25 : 0.16) : Colors.black.withValues(alpha: 0.25),
-              blurRadius: _hovered ? 28 : 18,
-              offset: const Offset(0, 10),
-            ),
+            if (unlocked)
+              BoxShadow(
+                color: b.accentColor.withValues(alpha: _hovered ? 0.25 : 0.16),
+                blurRadius: _hovered ? 28 : 18,
+                offset: const Offset(0, 10),
+              )
+            else
+              ...AppColors.cardShadow,
           ],
         ),
         child: Column(
@@ -80,7 +90,7 @@ class _BadgeGalleryCardState extends State<BadgeGalleryCard> {
                 child: Icon(
                   b.icon,
                   size: 34,
-                  color: unlocked ? const Color(0xFF081020) : AppColors.textMuted.withValues(alpha: 0.6),
+                  color: unlocked ? AppColors.badgeMedalIcon : AppColors.textMuted.withValues(alpha: 0.6),
                 ),
               ),
             ),
@@ -89,7 +99,10 @@ class _BadgeGalleryCardState extends State<BadgeGalleryCard> {
               b.name,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.text,
+                  ),
             ),
             const SizedBox(height: 6),
             Text(

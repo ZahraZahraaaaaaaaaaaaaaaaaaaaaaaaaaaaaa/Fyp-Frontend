@@ -254,7 +254,7 @@ class _SummaryCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(color: AppColors.border),
-        boxShadow: DesignTokens.shadowCard(Colors.black),
+        boxShadow: AppColors.cardShadow,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -331,11 +331,17 @@ class _RecommendedMissionCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          const Text('Recommended Next Step', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+          Text(
+            'Recommended Next Step',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: AppColors.text),
+          ),
           const SizedBox(height: 10),
           Text(
             scenario?.title ?? 'Advanced Social Engineering Defense',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.text,
+                ),
           ),
           const SizedBox(height: 6),
           Text(
@@ -410,7 +416,10 @@ class _LearningPathCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Text('Overall Learning Path', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18)),
+              Text(
+                'Overall Learning Path',
+                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18, color: AppColors.text),
+              ),
               const Spacer(),
               TextButton(onPressed: () {}, child: const Text('View Roadmap')),
             ],
@@ -499,7 +508,7 @@ class _PathRow extends StatelessWidget {
                       children: [
                         Text(tag, style: TextStyle(color: AppColors.textMuted, fontSize: 10)),
                         const SizedBox(height: 4),
-                        Text(title, style: TextStyle(fontWeight: FontWeight.w700)),
+                        Text(title, style: TextStyle(fontWeight: FontWeight.w700, color: AppColors.text)),
                       ],
                     ),
                   ),
@@ -539,7 +548,7 @@ class _BadgePreviewRail extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text('Badges', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20)),
+              Text('Badges', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20, color: AppColors.text)),
               const Spacer(),
               Icon(Icons.grid_view_rounded, size: 16, color: AppColors.textMuted),
             ],
@@ -594,7 +603,7 @@ class _MiniBadgeRow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(badge.name, style: TextStyle(fontWeight: FontWeight.w700)),
+                Text(badge.name, style: TextStyle(fontWeight: FontWeight.w700, color: AppColors.text)),
                 const SizedBox(height: 3),
                 Text(
                   badge.description,

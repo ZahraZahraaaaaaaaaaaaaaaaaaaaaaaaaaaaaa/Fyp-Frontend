@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../badges/badge_catalog.dart';
 import '../models/scenario_model.dart';
 import '../providers/auth_provider.dart';
+import '../providers/theme_provider.dart';
 import '../services/api_service.dart';
 import '../theme/app_colors.dart';
 import '../theme/design_tokens.dart';
@@ -41,6 +42,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<ThemeProvider>();
     final auth = context.watch<AuthProvider>();
     final u = auth.user;
     final fullName = u?.fullName ?? 'Demo Trainee';
@@ -214,7 +216,7 @@ class _ProfileHeroCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppColors.border),
-        boxShadow: DesignTokens.shadowCard(Colors.black),
+        boxShadow: AppColors.cardShadow,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -237,7 +239,7 @@ class _ProfileHeroCard extends StatelessWidget {
                 child: Center(
                   child: Text(
                     initial,
-                    style: TextStyle(fontSize: 38, fontWeight: FontWeight.w900),
+                    style: TextStyle(fontSize: 38, fontWeight: FontWeight.w900, color: AppColors.text),
                   ),
                 ),
               ),
@@ -258,7 +260,13 @@ class _ProfileHeroCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Text(fullName, style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800)),
+                    Text(
+                      fullName,
+                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.text,
+                          ),
+                    ),
                     const SizedBox(height: 4),
                     Text(email, style: TextStyle(color: AppColors.textMuted)),
                     const SizedBox(height: 6),
@@ -353,7 +361,13 @@ class _ProfileStatCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 10),
-          Text(value, style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800)),
+          Text(
+            value,
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.text,
+                ),
+          ),
           const SizedBox(height: 6),
           Text(
             hint,
@@ -396,7 +410,10 @@ class _BadgePreviewSection extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Achievement Badges', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 20)),
+                  Text(
+                    'Achievement Badges',
+                    style: TextStyle(fontWeight: FontWeight.w800, fontSize: 20, color: AppColors.text),
+                  ),
                   const SizedBox(height: 4),
                   Text('Recent milestones and security certifications earned', style: TextStyle(color: AppColors.textMuted)),
                 ],
@@ -455,7 +472,10 @@ class _BadgeMiniCard extends StatelessWidget {
                 gradient: LinearGradient(colors: badge.faceGradient),
                 border: Border.all(color: badge.accentColor.withValues(alpha: 0.5)),
               ),
-              child: Icon(unlocked ? badge.icon : Icons.lock_outline, color: Colors.white),
+              child: Icon(
+                unlocked ? badge.icon : Icons.lock_outline,
+                color: unlocked ? AppColors.badgeMedalIcon : AppColors.textMuted,
+              ),
             ),
             const SizedBox(height: 8),
             Text(
@@ -463,7 +483,7 @@ class _BadgeMiniCard extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700),
+              style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: AppColors.text),
             ),
             const SizedBox(height: 2),
             Text(
@@ -494,7 +514,10 @@ class _RecentActivitySection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Recent Training Activity', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 20)),
+          Text(
+            'Recent Training Activity',
+            style: TextStyle(fontWeight: FontWeight.w800, fontSize: 20, color: AppColors.text),
+          ),
           const SizedBox(height: 10),
           if (activities.isEmpty)
             Text('No recent activity yet. Start a scenario to build your timeline.', style: TextStyle(color: AppColors.textMuted))
@@ -533,7 +556,7 @@ class _ActivityRow extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(item.title, style: TextStyle(fontWeight: FontWeight.w700)),
+                  Text(item.title, style: TextStyle(fontWeight: FontWeight.w700, color: AppColors.text)),
                   const SizedBox(height: 2),
                   Text(item.subtitle, style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
                 ],

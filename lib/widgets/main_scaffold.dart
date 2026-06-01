@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/auth_provider.dart';
+import '../providers/theme_provider.dart';
 import '../theme/app_colors.dart';
 import '../theme/design_tokens.dart';
 import 'notification_bell.dart';
@@ -21,6 +22,10 @@ class MainScaffold extends StatelessWidget {
   final Widget child;
   final List<Widget>? actions;
 
+  static void _ensureThemeRebuild(BuildContext context) {
+    context.watch<ThemeProvider>();
+  }
+
   bool _active(BuildContext context, String route) {
     final loc = GoRouterState.of(context).matchedLocation;
     if (route == '/home') return loc == '/home';
@@ -31,6 +36,7 @@ class MainScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    _ensureThemeRebuild(context);
     final auth = context.watch<AuthProvider>();
     final u = auth.user;
     final desktop = MediaQuery.sizeOf(context).width >= 1180;
@@ -183,6 +189,7 @@ class _DesktopTopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MainScaffold._ensureThemeRebuild(context);
     final auth = context.watch<AuthProvider>();
     final u = auth.user;
     final initial = (u?.fullName ?? 'U').isNotEmpty ? u!.fullName[0].toUpperCase() : 'U';
@@ -228,6 +235,7 @@ class _DesktopSidebar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MainScaffold._ensureThemeRebuild(context);
     final auth = context.watch<AuthProvider>();
     final u = auth.user;
     final initial = (u?.fullName ?? 'U').isNotEmpty ? u!.fullName[0].toUpperCase() : 'U';

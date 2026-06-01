@@ -23,12 +23,13 @@ ThemeData buildAppTheme({required bool isDark}) {
     scaffoldBackgroundColor: AppColors.bg,
     cardColor: AppColors.surface,
     dividerColor: AppColors.border,
-    textTheme: base.textTheme.copyWith(
-      bodyMedium: base.textTheme.bodyMedium?.copyWith(color: AppColors.text),
-      bodyLarge: base.textTheme.bodyLarge?.copyWith(color: AppColors.text),
-      labelLarge: base.textTheme.labelLarge?.copyWith(color: AppColors.textMuted),
-      titleLarge: base.textTheme.titleLarge?.copyWith(color: AppColors.text),
-      titleMedium: base.textTheme.titleMedium?.copyWith(color: AppColors.text),
+    textTheme: base.textTheme.apply(
+      bodyColor: AppColors.text,
+      displayColor: AppColors.text,
+    ),
+    primaryTextTheme: base.primaryTextTheme.apply(
+      bodyColor: AppColors.text,
+      displayColor: AppColors.text,
     ),
     appBarTheme: AppBarTheme(
       backgroundColor: AppColors.bg,

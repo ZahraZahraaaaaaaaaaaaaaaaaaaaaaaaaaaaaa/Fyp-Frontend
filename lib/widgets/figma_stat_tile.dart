@@ -27,7 +27,7 @@ class FigmaStatTile extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(DesignTokens.radiusMd),
         border: Border.all(color: AppColors.border),
-        boxShadow: DesignTokens.shadowCard(Colors.black),
+        boxShadow: AppColors.cardShadow,
       ),
       padding: const EdgeInsets.all(18),
       child: Row(

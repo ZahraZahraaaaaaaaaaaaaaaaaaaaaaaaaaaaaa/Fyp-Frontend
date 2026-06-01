@@ -174,7 +174,7 @@ class _PanelCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: AppColors.border),
-        boxShadow: DesignTokens.shadowCard(Colors.black),
+        boxShadow: AppColors.cardShadow,
       ),
       child: child,
     );
@@ -222,7 +222,7 @@ class _WeaknessesCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Weaknesses', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18)),
+          Text('Weaknesses', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18, color: AppColors.text)),
           const SizedBox(height: 12),
           if (weaknesses.isEmpty)
             Text('No major weaknesses detected yet.', style: TextStyle(color: AppColors.textMuted))
@@ -277,7 +277,10 @@ class _RecommendationCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Adaptive recommendation', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18)),
+          Text(
+            'Adaptive recommendation',
+            style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18, color: AppColors.text),
+          ),
           const SizedBox(height: 10),
           Container(
             width: double.infinity,
@@ -330,7 +333,7 @@ class _StrengthsCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Strengths', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18)),
+          Text('Strengths', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18, color: AppColors.text)),
           const SizedBox(height: 10),
           if (strengths.isEmpty)
             Text('Strengths appear after more completions.', style: TextStyle(color: AppColors.textMuted))
