@@ -459,7 +459,7 @@ class _BadgeMiniCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Opacity(
-      opacity: unlocked ? 1 : 0.82,
+      opacity: unlocked ? 1 : 0.45,
       child: SizedBox(
         width: 110,
         child: Column(
@@ -470,14 +470,11 @@ class _BadgeMiniCard extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 gradient: LinearGradient(colors: badge.faceGradient),
-                border: Border.all(
-                  color: badge.accentColor.withValues(alpha: unlocked ? 0.5 : 0.32),
-                ),
+                border: Border.all(color: badge.accentColor.withValues(alpha: 0.5)),
               ),
               child: Icon(
-                badge.icon,
-                size: 28,
-                color: unlocked ? AppColors.badgeMedalIcon : AppColors.badgeMedalIconLocked,
+                unlocked ? badge.icon : Icons.lock_outline,
+                color: unlocked ? AppColors.badgeMedalIcon : AppColors.textMuted,
               ),
             ),
             const SizedBox(height: 8),

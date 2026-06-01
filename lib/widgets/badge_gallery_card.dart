@@ -72,31 +72,25 @@ class _BadgeGalleryCardState extends State<BadgeGalleryCard> {
             ),
             const SizedBox(height: 12),
             Center(
-              child: Opacity(
-                opacity: unlocked ? 1 : 0.88,
-                child: Container(
-                  width: 84,
-                  height: 84,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: LinearGradient(colors: b.faceGradient),
-                    border: Border.all(
-                      color: b.accentColor.withValues(alpha: unlocked ? 0.7 : 0.32),
-                      width: 2,
+              child: Container(
+                width: 84,
+                height: 84,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: LinearGradient(colors: b.faceGradient),
+                  border: Border.all(color: b.accentColor.withValues(alpha: unlocked ? 0.7 : 0.18), width: 2),
+                  boxShadow: [
+                    BoxShadow(
+                      color: b.accentColor.withValues(alpha: unlocked ? 0.32 : 0.06),
+                      blurRadius: 26,
+                      offset: const Offset(0, 8),
                     ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: b.accentColor.withValues(alpha: unlocked ? 0.32 : 0.14),
-                        blurRadius: 26,
-                        offset: const Offset(0, 8),
-                      ),
-                    ],
-                  ),
-                  child: Icon(
-                    b.icon,
-                    size: 34,
-                    color: unlocked ? AppColors.badgeMedalIcon : AppColors.badgeMedalIconLocked,
-                  ),
+                  ],
+                ),
+                child: Icon(
+                  b.icon,
+                  size: 34,
+                  color: unlocked ? AppColors.badgeMedalIcon : AppColors.textMuted.withValues(alpha: 0.6),
                 ),
               ),
             ),

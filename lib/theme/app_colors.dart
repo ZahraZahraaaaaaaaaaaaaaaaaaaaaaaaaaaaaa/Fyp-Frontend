@@ -36,11 +36,8 @@ class AppColors {
 
   static Color get badgeCardLocked => _palette.surface2;
 
-  /// Icon on colorful badge medallion when unlocked.
+  /// Icon on colorful badge medallion (readable on gradients in both themes).
   static Color get badgeMedalIcon => isDark ? const Color(0xFF081020) : Colors.white;
-
-  /// Icon on medallion when locked — stay high-contrast on blue/teal face gradients.
-  static Color get badgeMedalIconLocked => isDark ? Colors.white.withValues(alpha: 0.82) : Colors.white;
 
   static List<BoxShadow> get cardShadow => DesignTokens.shadowCard(
         cardShadowBase,
