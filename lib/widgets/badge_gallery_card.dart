@@ -96,7 +96,7 @@ class _BadgeGalleryCardState extends State<BadgeGalleryCard> {
               b.description,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(color: AppColors.textMuted, fontSize: 12, height: 1.3),
+              style: TextStyle(color: AppColors.textMuted, fontSize: 12, height: 1.3),
             ),
             const SizedBox(height: 8),
             Text(
@@ -136,7 +136,7 @@ class _BadgeGalleryCardState extends State<BadgeGalleryCard> {
                 const SizedBox(width: 8),
                 Text(
                   '${b.points}',
-                  style: const TextStyle(color: AppColors.textMuted, fontSize: 11, fontWeight: FontWeight.w700),
+                  style: TextStyle(color: AppColors.textMuted, fontSize: 11, fontWeight: FontWeight.w700),
                 ),
               ],
             ),

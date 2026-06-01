@@ -17,12 +17,17 @@ class AppCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final card = Container(
+    final card = AnimatedContainer(
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeInOut,
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(DesignTokens.radiusMd),
         border: Border.all(color: AppColors.border),
-        boxShadow: DesignTokens.shadowCard(Colors.black),
+        boxShadow: DesignTokens.shadowCard(
+          AppColors.cardShadowBase,
+          alpha: AppColors.isDark ? 0.35 : 0.1,
+        ),
       ),
       child: Padding(padding: padding, child: child),
     );

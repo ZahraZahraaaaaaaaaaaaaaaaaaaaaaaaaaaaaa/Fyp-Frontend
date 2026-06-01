@@ -65,11 +65,11 @@ class BadgeMedal extends StatelessWidget {
                     borderRadius: BorderRadius.circular(999),
                     border: Border.all(color: AppColors.border),
                   ),
-                  child: const Row(
+                  child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(Icons.lock_outline, size: 14, color: AppColors.textMuted),
-                      SizedBox(width: 6),
+                      const SizedBox(width: 6),
                       Text('Locked', style: TextStyle(fontSize: 11, color: AppColors.textMuted)),
                     ],
                   ),

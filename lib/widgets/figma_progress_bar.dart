@@ -59,13 +59,13 @@ class FigmaProgressBar extends StatelessWidget {
                   Expanded(
                     child: Text(
                       label!,
-                      style: const TextStyle(color: AppColors.textMuted, fontWeight: FontWeight.w500),
+                      style: TextStyle(color: AppColors.textMuted, fontWeight: FontWeight.w500),
                     ),
                   ),
                 if (showPercentage)
                   Text(
                     '${progress.round()}%',
-                    style: const TextStyle(color: AppColors.textMuted, fontSize: 13),
+                    style: TextStyle(color: AppColors.textMuted, fontSize: 13),
                   ),
               ],
             ),

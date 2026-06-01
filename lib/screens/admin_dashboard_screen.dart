@@ -68,7 +68,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                         style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
                       ),
                       const SizedBox(height: 6),
-                      const Text(
+                      Text(
                         'Operational overview for users, scenarios, attempts, and completion rate.',
                         style: TextStyle(color: AppColors.textMuted, height: 1.4),
                       ),

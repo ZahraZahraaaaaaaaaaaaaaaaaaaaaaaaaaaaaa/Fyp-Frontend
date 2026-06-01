@@ -99,12 +99,12 @@ class _NotificationBellState extends State<NotificationBell> {
                 decoration: BoxDecoration(
                   color: AppColors.danger,
                   borderRadius: BorderRadius.circular(999),
-                  border: Border.all(color: const Color(0xFF060F22), width: 1.5),
+                  border: Border.all(color: AppColors.topBar, width: 1.5),
                 ),
                 child: Text(
                   unread > 9 ? '9+' : '$unread',
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.white,
                     fontSize: 9,
                     fontWeight: FontWeight.w800,
@@ -171,7 +171,7 @@ class _NotificationPanel extends StatelessWidget {
                 ],
               ),
             ),
-            const Divider(height: 1, color: AppColors.border),
+            Divider(height: 1, color: AppColors.border),
             Flexible(
               child: provider.loading && provider.items.isEmpty
                   ? const Padding(
@@ -184,8 +184,8 @@ class _NotificationPanel extends StatelessWidget {
                         const _SectionHeader(title: 'Your Notifications'),
                         const SizedBox(height: 8),
                         if (provider.items.isEmpty)
-                          const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 12),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 12),
                             child: Text(
                               'Activity notifications will appear here as you train.',
                               style: TextStyle(color: AppColors.textMuted, fontSize: 12),
@@ -231,7 +231,7 @@ class _SectionHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title,
-      style: const TextStyle(
+      style: TextStyle(
         fontSize: 11,
         fontWeight: FontWeight.w800,
         letterSpacing: 0.4,
@@ -310,7 +310,7 @@ class _NotificationCard extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       notification.message,
-                      style: const TextStyle(color: AppColors.textMuted, fontSize: 12, height: 1.35),
+                      style: TextStyle(color: AppColors.textMuted, fontSize: 12, height: 1.35),
                     ),
                     const SizedBox(height: 6),
                     Text(
@@ -368,7 +368,7 @@ class _PlatformNoticeCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         notice.title,
-                        style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
+                        style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
                       ),
                     ),
                     Container(
@@ -377,7 +377,7 @@ class _PlatformNoticeCard extends StatelessWidget {
                         color: AppColors.border.withValues(alpha: 0.5),
                         borderRadius: BorderRadius.circular(4),
                       ),
-                      child: const Text(
+                      child: Text(
                         'Platform',
                         style: TextStyle(color: AppColors.textMuted, fontSize: 9, fontWeight: FontWeight.w600),
                       ),
@@ -387,7 +387,7 @@ class _PlatformNoticeCard extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   notice.message,
-                  style: const TextStyle(color: AppColors.textMuted, fontSize: 12, height: 1.35),
+                  style: TextStyle(color: AppColors.textMuted, fontSize: 12, height: 1.35),
                 ),
               ],
             ),

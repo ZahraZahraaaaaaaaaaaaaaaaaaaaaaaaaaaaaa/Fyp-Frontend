@@ -9,6 +9,7 @@ import '../services/api_service.dart';
 import '../utils/browser_login_autofill.dart';
 import '../theme/app_colors.dart';
 import '../theme/design_tokens.dart';
+import '../widgets/theme_mode_toggle.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -75,15 +76,20 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [Color(0xFF070B14), Color(0xFF0A1328)],
+            colors: [AppColors.authGradientStart, AppColors.authGradientEnd],
           ),
         ),
         child: Stack(
           children: [
+            const Positioned(
+              top: 8,
+              right: 8,
+              child: SafeArea(child: ThemeModeToggle()),
+            ),
             Positioned(
               right: -120,
               top: -30,
@@ -198,7 +204,7 @@ class _AuthBrandHeader extends StatelessWidget {
         const SizedBox(height: 4),
         Text(
           'Advance your security expertise',
-          style: const TextStyle(color: AppColors.textMuted),
+          style: TextStyle(color: AppColors.textMuted),
           textAlign: TextAlign.center,
         ),
       ],
@@ -258,12 +264,12 @@ class _LoginCard extends StatelessWidget {
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
               ),
               const SizedBox(height: 6),
-              const Text(
+              Text(
                 'Enter your credentials to access the lab.',
                 style: TextStyle(color: AppColors.textMuted),
               ),
               const SizedBox(height: 18),
-              const Text(
+              Text(
                 'Work Email',
                 style: TextStyle(color: AppColors.textMuted, fontSize: 12, fontWeight: FontWeight.w600),
               ),
@@ -294,7 +300,7 @@ class _LoginCard extends StatelessWidget {
               const SizedBox(height: 12),
               Row(
                 children: [
-                  const Text(
+                  Text(
                     'Password',
                     style: TextStyle(color: AppColors.textMuted, fontSize: 12, fontWeight: FontWeight.w600),
                   ),
@@ -334,12 +340,12 @@ class _LoginCard extends StatelessWidget {
             Row(
               children: [
                 Checkbox(value: rememberDevice, onChanged: onToggleRemember),
-                const Text('Remember this device', style: TextStyle(color: AppColors.textMuted)),
+                Text('Remember this device', style: TextStyle(color: AppColors.textMuted)),
               ],
             ),
             if (error != null) ...[
               const SizedBox(height: 6),
-              Text(error!, style: const TextStyle(color: AppColors.danger)),
+              Text(error!, style: TextStyle(color: AppColors.danger)),
             ],
             const SizedBox(height: 8),
               FilledButton(
@@ -376,7 +382,7 @@ class _FooterCreateAccount extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text('New to the platform?', style: TextStyle(color: AppColors.textMuted)),
+        Text('New to the platform?', style: TextStyle(color: AppColors.textMuted)),
         TextButton(
           onPressed: onCreateAccount,
           child: const Text('Create an account'),

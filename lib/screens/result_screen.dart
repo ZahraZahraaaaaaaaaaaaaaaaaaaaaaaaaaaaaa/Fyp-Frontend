@@ -57,7 +57,7 @@ class ResultScreen extends StatelessWidget {
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w900),
                 ),
                 const SizedBox(height: 6),
-                Text(headline, style: const TextStyle(color: AppColors.textMuted, height: 1.3)),
+                Text(headline, style: TextStyle(color: AppColors.textMuted, height: 1.3)),
                 const SizedBox(height: 16),
                 LayoutBuilder(
                   builder: (context, c) {
@@ -112,7 +112,7 @@ class ResultScreen extends StatelessWidget {
                                 const SizedBox(height: 12),
                                 Text(
                                   feedback,
-                                  style: const TextStyle(color: AppColors.textMuted, height: 1.35),
+                                  style: TextStyle(color: AppColors.textMuted, height: 1.35),
                                 ),
                                 if (perfectRun) ...[
                                   const SizedBox(height: 10),
@@ -148,7 +148,7 @@ class ResultScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 10),
                           if (earnedBadges.isEmpty)
-                            const Text('No new badges this run.', style: TextStyle(color: AppColors.textMuted))
+                            Text('No new badges this run.', style: TextStyle(color: AppColors.textMuted))
                           else
                             Wrap(
                               spacing: 12,
@@ -163,7 +163,7 @@ class ResultScreen extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(12),
                                       border: Border.all(color: AppColors.border),
                                     ),
-                                    child: Text(id, style: const TextStyle(color: AppColors.textMuted)),
+                                    child: Text(id, style: TextStyle(color: AppColors.textMuted)),
                                   );
                                 }
                                 return _EarnedBadgeChip(def: def);
@@ -251,9 +251,9 @@ class _MetricPill extends StatelessWidget {
         children: [
           Icon(icon, size: 16, color: c),
           const SizedBox(width: 8),
-          Text(label, style: const TextStyle(color: AppColors.textMuted, fontWeight: FontWeight.w600)),
+          Text(label, style: TextStyle(color: AppColors.textMuted, fontWeight: FontWeight.w600)),
           const SizedBox(width: 10),
-          Text(value, style: const TextStyle(fontWeight: FontWeight.w800)),
+          Text(value, style: TextStyle(fontWeight: FontWeight.w800)),
         ],
       ),
     );
@@ -284,7 +284,7 @@ class _EarnedBadgeChip extends StatelessWidget {
             size: 40,
           ),
           const SizedBox(width: 10),
-          Text(def.name, style: const TextStyle(fontWeight: FontWeight.w800)),
+          Text(def.name, style: TextStyle(fontWeight: FontWeight.w800)),
         ],
       ),
     );

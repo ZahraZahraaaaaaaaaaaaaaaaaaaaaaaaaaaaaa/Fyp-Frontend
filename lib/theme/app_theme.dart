@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 
 import 'app_colors.dart';
+import 'theme_palette.dart';
 
-ThemeData buildAppTheme() {
+ThemeData buildAppTheme({required bool isDark}) {
+  AppColors.palette = isDark ? ThemePalette.dark : ThemePalette.light;
+
   final base = ThemeData(
     useMaterial3: true,
-    brightness: Brightness.dark,
-    colorScheme: const ColorScheme.dark(
+    brightness: isDark ? Brightness.dark : Brightness.light,
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: AppColors.primary,
+      brightness: isDark ? Brightness.dark : Brightness.light,
       primary: AppColors.primary,
       secondary: AppColors.secondary,
       surface: AppColors.surface,
@@ -22,30 +27,33 @@ ThemeData buildAppTheme() {
       bodyMedium: base.textTheme.bodyMedium?.copyWith(color: AppColors.text),
       bodyLarge: base.textTheme.bodyLarge?.copyWith(color: AppColors.text),
       labelLarge: base.textTheme.labelLarge?.copyWith(color: AppColors.textMuted),
+      titleLarge: base.textTheme.titleLarge?.copyWith(color: AppColors.text),
+      titleMedium: base.textTheme.titleMedium?.copyWith(color: AppColors.text),
     ),
-    appBarTheme: const AppBarTheme(
+    appBarTheme: AppBarTheme(
       backgroundColor: AppColors.bg,
       foregroundColor: AppColors.text,
       elevation: 0,
       centerTitle: false,
     ),
+    drawerTheme: DrawerThemeData(backgroundColor: AppColors.surface),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: AppColors.surface2,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
-        borderSide: const BorderSide(color: AppColors.border),
+        borderSide: BorderSide(color: AppColors.border),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
-        borderSide: const BorderSide(color: AppColors.border),
+        borderSide: BorderSide(color: AppColors.border),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
         borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
       ),
-      hintStyle: const TextStyle(color: AppColors.textMuted),
-      labelStyle: const TextStyle(color: AppColors.textMuted),
+      hintStyle: TextStyle(color: AppColors.textMuted),
+      labelStyle: TextStyle(color: AppColors.textMuted),
     ),
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
@@ -65,16 +73,16 @@ ThemeData buildAppTheme() {
         side: const BorderSide(color: AppColors.primary, width: 1.5),
       ),
     ),
-    snackBarTheme: const SnackBarThemeData(
+    snackBarTheme: SnackBarThemeData(
       backgroundColor: AppColors.surface2,
       contentTextStyle: TextStyle(color: AppColors.text),
     ),
     chipTheme: base.chipTheme.copyWith(
       backgroundColor: AppColors.surface2,
-      side: const BorderSide(color: AppColors.border),
-      labelStyle: const TextStyle(color: AppColors.text),
+      side: BorderSide(color: AppColors.border),
+      labelStyle: TextStyle(color: AppColors.text),
     ),
-    dialogTheme: const DialogThemeData(backgroundColor: AppColors.surface),
+    dialogTheme: DialogThemeData(backgroundColor: AppColors.surface),
+    iconTheme: IconThemeData(color: AppColors.textMuted),
   );
 }
-

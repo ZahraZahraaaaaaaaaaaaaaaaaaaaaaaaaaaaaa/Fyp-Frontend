@@ -20,7 +20,7 @@ class BadgeGallerySidebar extends StatelessWidget {
       margin: const EdgeInsets.fromLTRB(12, 12, 0, 12),
       padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
       decoration: BoxDecoration(
-        color: const Color(0xFF070D1D),
+        color: AppColors.sidebar,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(color: AppColors.border.withValues(alpha: 0.85)),
       ),
@@ -33,7 +33,7 @@ class BadgeGallerySidebar extends StatelessWidget {
           ),
           const SizedBox(height: 14),
           const Text('The Archive', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
-          Text('ELITE RANK • LEVEL $level', style: const TextStyle(fontSize: 11, color: AppColors.textMuted)),
+          Text('ELITE RANK • LEVEL $level', style: TextStyle(fontSize: 11, color: AppColors.textMuted)),
           const SizedBox(height: 16),
           _NavItem(label: 'Dashboard', icon: Icons.dashboard_outlined, onTap: () => context.go('/home')),
           _NavItem(label: 'Badges', icon: Icons.workspace_premium_outlined, active: true, onTap: () {}),
@@ -48,11 +48,11 @@ class BadgeGallerySidebar extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: AppColors.primary.withValues(alpha: 0.35)),
             ),
-            child: const Column(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Unlock Premium', style: TextStyle(fontWeight: FontWeight.w700)),
-                SizedBox(height: 4),
+                Text('Unlock Premium', style: TextStyle(fontWeight: FontWeight.w700, color: AppColors.text)),
+                const SizedBox(height: 4),
                 Text(
                   'Get exclusive seasonal badges and double XP.',
                   style: TextStyle(color: AppColors.textMuted, fontSize: 12, height: 1.3),

@@ -8,6 +8,7 @@ import '../providers/notification_provider.dart';
 import '../services/api_service.dart';
 import '../widgets/app_card.dart';
 import '../theme/app_colors.dart';
+import '../widgets/theme_mode_toggle.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -57,15 +58,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 420),
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
-            child: AppCard(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [AppColors.authGradientStart, AppColors.authGradientEnd],
+          ),
+        ),
+        child: Stack(
+          children: [
+            const Positioned(
+              top: 8,
+              right: 8,
+              child: SafeArea(child: ThemeModeToggle()),
+            ),
+            Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 420),
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(24),
+                  child: AppCard(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
                   Container(
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
@@ -122,7 +138,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   if (_error != null) ...[
                     const SizedBox(height: 12),
-                    Text(_error!, style: const TextStyle(color: AppColors.danger)),
+                    Text(_error!, style: TextStyle(color: AppColors.danger)),
                   ],
                   const SizedBox(height: 20),
                   FilledButton(
@@ -132,14 +148,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         : const Text('Create account'),
                   ),
                   const SizedBox(height: 12),
-                  TextButton(
-                    onPressed: () => context.go('/login'),
-                    child: const Text('Already have an account'),
+                        TextButton(
+                          onPressed: () => context.go('/login'),
+                          child: const Text('Already have an account'),
+                        ),
+                      ],
+                    ),
                   ),
-                ],
+                ),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );

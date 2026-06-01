@@ -65,7 +65,7 @@ class FeedbackScreen extends StatelessWidget {
                           ),
                           child: Text(
                             pointsEarned > 0 ? '+$pointsEarned pts' : '+0 pts',
-                            style: const TextStyle(fontWeight: FontWeight.w700, color: AppColors.textMuted),
+                            style: TextStyle(fontWeight: FontWeight.w700, color: AppColors.textMuted),
                           ),
                         ),
                       ],
@@ -80,7 +80,7 @@ class FeedbackScreen extends StatelessWidget {
                     const SizedBox(height: 10),
                     SelectableText(
                       feedbackText,
-                      style: const TextStyle(height: 1.45, color: AppColors.textMuted),
+                      style: TextStyle(height: 1.45, color: AppColors.textMuted),
                     ),
                     const SizedBox(height: 18),
                     SizedBox(

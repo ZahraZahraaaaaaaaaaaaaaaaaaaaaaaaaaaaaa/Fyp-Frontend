@@ -60,17 +60,17 @@ class BadgeCard extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 6),
-                Text(badge.description, style: const TextStyle(color: AppColors.textMuted, height: 1.35)),
+                Text(badge.description, style: TextStyle(color: AppColors.textMuted, height: 1.35)),
                 const SizedBox(height: 10),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Icon(Icons.flag_outlined, size: 16, color: AppColors.textMuted),
+                    Icon(Icons.flag_outlined, size: 16, color: AppColors.textMuted),
                     const SizedBox(width: 6),
                     Expanded(
                       child: Text(
                         badge.condition,
-                        style: const TextStyle(color: AppColors.textMuted, height: 1.3),
+                        style: TextStyle(color: AppColors.textMuted, height: 1.3),
                       ),
                     ),
                   ],

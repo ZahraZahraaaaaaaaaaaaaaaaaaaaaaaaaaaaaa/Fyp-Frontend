@@ -64,10 +64,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text('Unable to load dashboard data.', style: TextStyle(color: AppColors.textMuted)),
+              Text('Unable to load dashboard data.', style: TextStyle(color: AppColors.textMuted)),
               if (dash.error != null) ...[
                 const SizedBox(height: 8),
-                Text(dash.error!, style: const TextStyle(color: AppColors.textMuted, fontSize: 12)),
+                Text(dash.error!, style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
               ],
               const SizedBox(height: 16),
               FilledButton(onPressed: _refreshDashboard, child: const Text('Retry')),
@@ -104,7 +104,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 const SizedBox(height: 6),
                 Text(
                   'Your sector is currently secure. $pending pending training modules required.',
-                  style: const TextStyle(color: AppColors.textMuted),
+                  style: TextStyle(color: AppColors.textMuted),
                 ),
               ],
             ),
@@ -261,7 +261,7 @@ class _SummaryCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text(label, style: const TextStyle(fontSize: 11, color: AppColors.textMuted, letterSpacing: 0.3)),
+              Text(label, style: TextStyle(fontSize: 11, color: AppColors.textMuted, letterSpacing: 0.3)),
               const Spacer(),
               Icon(icon, size: 16, color: accent),
             ],
@@ -280,7 +280,7 @@ class _SummaryCard extends StatelessWidget {
               ),
             )
           else
-            Text(hint, style: const TextStyle(color: AppColors.textMuted, fontSize: 11)),
+            Text(hint, style: TextStyle(color: AppColors.textMuted, fontSize: 11)),
         ],
       ),
     );
@@ -340,14 +340,14 @@ class _RecommendedMissionCard extends StatelessWidget {
           const SizedBox(height: 6),
           Text(
             scenario?.description ?? 'Learn to identify sophisticated spear-phishing attempts and deepfake voice synthesis attacks.',
-            style: const TextStyle(color: AppColors.textMuted, height: 1.35),
+            style: TextStyle(color: AppColors.textMuted, height: 1.35),
           ),
           const SizedBox(height: 16),
           Row(
             children: [
-              const Text('MODULE PROGRESS', style: TextStyle(color: AppColors.textMuted, fontSize: 11, letterSpacing: 0.2)),
+              Text('MODULE PROGRESS', style: TextStyle(color: AppColors.textMuted, fontSize: 11, letterSpacing: 0.2)),
               const Spacer(),
-              Text('$p% COMPLETE', style: const TextStyle(color: AppColors.accentTeal, fontSize: 11, fontWeight: FontWeight.w700)),
+              Text('$p% COMPLETE', style: TextStyle(color: AppColors.accentTeal, fontSize: 11, fontWeight: FontWeight.w700)),
             ],
           ),
           const SizedBox(height: 8),
@@ -497,13 +497,13 @@ class _PathRow extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(tag, style: const TextStyle(color: AppColors.textMuted, fontSize: 10)),
+                        Text(tag, style: TextStyle(color: AppColors.textMuted, fontSize: 10)),
                         const SizedBox(height: 4),
-                        Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
+                        Text(title, style: TextStyle(fontWeight: FontWeight.w700)),
                       ],
                     ),
                   ),
-                  if (meta.isNotEmpty) Text(meta, style: const TextStyle(color: AppColors.textMuted, fontSize: 11)),
+                  if (meta.isNotEmpty) Text(meta, style: TextStyle(color: AppColors.textMuted, fontSize: 11)),
                 ],
               ),
             ),
@@ -538,9 +538,9 @@ class _BadgePreviewRail extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            children: const [
+            children: [
               Text('Badges', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20)),
-              Spacer(),
+              const Spacer(),
               Icon(Icons.grid_view_rounded, size: 16, color: AppColors.textMuted),
             ],
           ),
@@ -594,13 +594,13 @@ class _MiniBadgeRow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(badge.name, style: const TextStyle(fontWeight: FontWeight.w700)),
+                Text(badge.name, style: TextStyle(fontWeight: FontWeight.w700)),
                 const SizedBox(height: 3),
                 Text(
                   badge.description,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(color: AppColors.textMuted, fontSize: 12, height: 1.3),
+                  style: TextStyle(color: AppColors.textMuted, fontSize: 12, height: 1.3),
                 ),
               ],
             ),

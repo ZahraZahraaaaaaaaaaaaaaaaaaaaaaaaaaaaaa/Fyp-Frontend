@@ -292,9 +292,9 @@ class _ScenariosHeader extends StatelessWidget {
                           children: [
                             Row(
                 children: [
-                  const Text('YOUR PROGRESS', style: TextStyle(fontSize: 10, color: AppColors.textMuted, fontWeight: FontWeight.w700)),
+                  Text('YOUR PROGRESS', style: TextStyle(fontSize: 10, color: AppColors.textMuted, fontWeight: FontWeight.w700)),
                   const Spacer(),
-                  Text('$completedCount of $total completed', style: const TextStyle(color: AppColors.text, fontSize: 11, fontWeight: FontWeight.w700)),
+                  Text('$completedCount of $total completed', style: TextStyle(color: AppColors.text, fontSize: 11, fontWeight: FontWeight.w700)),
                 ],
               ),
               const SizedBox(height: 8),
@@ -317,7 +317,7 @@ class _ScenariosHeader extends StatelessWidget {
             children: [
               Text('Training Scenarios', style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w900)),
               const SizedBox(height: 8),
-              const Text(
+              Text(
                 'Sharpen your security instincts with immersive, realistic simulations and decision-based learning.',
                 style: TextStyle(color: AppColors.textMuted, height: 1.35),
               ),
@@ -336,7 +336,7 @@ class _ScenariosHeader extends StatelessWidget {
                 children: [
                   Text('Training Scenarios', style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w900)),
                   const SizedBox(height: 8),
-                  const Text(
+                  Text(
                     'Sharpen your security instincts with immersive, realistic simulations.\nMaster threat detection through active practice.',
                     style: TextStyle(color: AppColors.textMuted, height: 1.35),
                   ),
@@ -448,7 +448,7 @@ class _ScenarioGridCardState extends State<_ScenarioGridCard> {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: locked
-                      ? [const Color(0xFF1A2236), const Color(0xFF0D1426)]
+                      ? [AppColors.lockedCardStart, AppColors.lockedCardEnd]
                       : [AppColors.surface2, AppColors.primary.withValues(alpha: 0.28)],
                 ),
               ),
@@ -477,7 +477,7 @@ class _ScenarioGridCardState extends State<_ScenarioGridCard> {
                       borderRadius: BorderRadius.circular(999),
                       border: Border.all(color: AppColors.border),
                     ),
-                    child: Text('~ ${s.estimatedTime} min', style: const TextStyle(fontSize: 10, color: AppColors.textMuted, fontWeight: FontWeight.w700)),
+                    child: Text('~ ${s.estimatedTime} min', style: TextStyle(fontSize: 10, color: AppColors.textMuted, fontWeight: FontWeight.w700)),
                                 ),
                               ],
                             ),
@@ -507,7 +507,7 @@ class _ScenarioGridCardState extends State<_ScenarioGridCard> {
                     s.description,
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(color: AppColors.textMuted, height: 1.35, fontSize: 13),
+                    style: TextStyle(color: AppColors.textMuted, height: 1.35, fontSize: 13),
                   ),
                   const SizedBox(height: 12),
                   Container(height: 1, color: AppColors.border.withValues(alpha: 0.7)),
@@ -519,11 +519,11 @@ class _ScenarioGridCardState extends State<_ScenarioGridCard> {
                           children: [
                             const Icon(Icons.bolt, size: 14, color: AppColors.accentTeal),
                                 const SizedBox(width: 4),
-                            Text('$xp XP', style: const TextStyle(color: AppColors.textMuted, fontSize: 11)),
+                            Text('$xp XP', style: TextStyle(color: AppColors.textMuted, fontSize: 11)),
                             const SizedBox(width: 10),
                             Icon(widget.done ? Icons.check_circle : Icons.flag_outlined, size: 14, color: widget.done ? AppColors.success : AppColors.textMuted),
                                 const SizedBox(width: 4),
-                            Text(widget.done ? 'Completed' : 'Pending', style: const TextStyle(color: AppColors.textMuted, fontSize: 11)),
+                            Text(widget.done ? 'Completed' : 'Pending', style: TextStyle(color: AppColors.textMuted, fontSize: 11)),
                           ],
                         ),
                       ),
@@ -542,7 +542,7 @@ class _ScenarioGridCardState extends State<_ScenarioGridCard> {
                     const SizedBox(height: 6),
                     Text(
                       'Unlock at level $requiredLevel (current: ${widget.userLevel})',
-                      style: const TextStyle(color: AppColors.textMuted, fontSize: 11),
+                      style: TextStyle(color: AppColors.textMuted, fontSize: 11),
                     ),
                   ],
                 ],
@@ -661,7 +661,7 @@ class _DailyChallengeBanner extends StatelessWidget {
                 const SizedBox(height: 6),
                 Text(
                   hint,
-                  style: const TextStyle(color: Color(0xFFD6E6FF), height: 1.35),
+                  style: TextStyle(color: Color(0xFFD6E6FF), height: 1.35),
                 ),
               ],
             ),

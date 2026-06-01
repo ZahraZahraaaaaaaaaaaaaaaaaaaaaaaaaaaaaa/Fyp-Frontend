@@ -23,11 +23,11 @@ class BadgesScreen extends StatelessWidget {
     final percentile = (12 + ((1 - completion) * 28)).round().clamp(1, 99);
 
     final content = Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [Color(0xFF060B18), Color(0xFF07122A)],
+          colors: [AppColors.authGradientStart, AppColors.authGradientEnd],
         ),
       ),
       child: SingleChildScrollView(
@@ -39,15 +39,15 @@ class BadgesScreen extends StatelessWidget {
               'Badge Gallery',
               style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                     fontWeight: FontWeight.w900,
-                    color: const Color(0xFFE8F0FF),
+                    color: AppColors.text,
                   ),
             ),
             const SizedBox(height: 8),
-            const Text(
+            Text(
               'Showcase your digital defense prowess. Complete security modules and',
               style: TextStyle(color: AppColors.textMuted, height: 1.35),
             ),
-            const Text(
+            Text(
               'maintain perfect streaks to earn high-tier elite badges.',
               style: TextStyle(color: AppColors.textMuted, height: 1.35),
             ),

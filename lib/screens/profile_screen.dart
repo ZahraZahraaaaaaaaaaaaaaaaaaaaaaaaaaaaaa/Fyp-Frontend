@@ -237,7 +237,7 @@ class _ProfileHeroCard extends StatelessWidget {
                 child: Center(
                   child: Text(
                     initial,
-                    style: const TextStyle(fontSize: 38, fontWeight: FontWeight.w900),
+                    style: TextStyle(fontSize: 38, fontWeight: FontWeight.w900),
                   ),
                 ),
               ),
@@ -254,19 +254,19 @@ class _ProfileHeroCard extends StatelessWidget {
                       ),
                       child: Text(
                         role.toUpperCase(),
-                        style: const TextStyle(color: AppColors.primary, fontSize: 11, fontWeight: FontWeight.w700),
+                        style: TextStyle(color: AppColors.primary, fontSize: 11, fontWeight: FontWeight.w700),
                       ),
                     ),
                     const SizedBox(height: 8),
                     Text(fullName, style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800)),
                     const SizedBox(height: 4),
-                    Text(email, style: const TextStyle(color: AppColors.textMuted)),
+                    Text(email, style: TextStyle(color: AppColors.textMuted)),
                     const SizedBox(height: 6),
                     Row(
                       children: [
-                        const Icon(Icons.location_on_outlined, color: AppColors.textMuted, size: 14),
+                        Icon(Icons.location_on_outlined, color: AppColors.textMuted, size: 14),
                         const SizedBox(width: 4),
-                        const Text(
+                        Text(
                           'Global Security Operations Center',
                           style: TextStyle(color: AppColors.textMuted, fontSize: 12),
                         ),
@@ -279,7 +279,7 @@ class _ProfileHeroCard extends StatelessWidget {
                           ),
                           child: Text(
                             'LVL $level',
-                            style: const TextStyle(color: AppColors.accentTeal, fontSize: 11, fontWeight: FontWeight.w700),
+                            style: TextStyle(color: AppColors.accentTeal, fontSize: 11, fontWeight: FontWeight.w700),
                           ),
                         ),
                       ],
@@ -290,7 +290,7 @@ class _ProfileHeroCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          const Text(
+          Text(
             'CURRENT PROGRESS TO NEXT LEVEL',
             style: TextStyle(color: AppColors.textMuted, fontSize: 10, fontWeight: FontWeight.w700),
           ),
@@ -309,7 +309,7 @@ class _ProfileHeroCard extends StatelessWidget {
             alignment: Alignment.centerRight,
             child: Text(
               '$xpCurrent / $xpTarget XP',
-              style: const TextStyle(color: AppColors.textMuted, fontSize: 12),
+              style: TextStyle(color: AppColors.textMuted, fontSize: 12),
             ),
           ),
         ],
@@ -349,7 +349,7 @@ class _ProfileStatCard extends StatelessWidget {
             children: [
               Icon(icon, size: 18, color: accent),
               const SizedBox(width: 8),
-              Text(label, style: const TextStyle(color: AppColors.textMuted, fontSize: 12)),
+              Text(label, style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
             ],
           ),
           const SizedBox(height: 10),
@@ -395,9 +395,9 @@ class _BadgePreviewSection extends StatelessWidget {
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   Text('Achievement Badges', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 20)),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   Text('Recent milestones and security certifications earned', style: TextStyle(color: AppColors.textMuted)),
                 ],
               ),
@@ -463,12 +463,12 @@ class _BadgeMiniCard extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700),
+              style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700),
             ),
             const SizedBox(height: 2),
             Text(
               unlocked ? 'Unlocked' : 'Locked',
-              style: const TextStyle(color: AppColors.textMuted, fontSize: 10),
+              style: TextStyle(color: AppColors.textMuted, fontSize: 10),
             ),
           ],
         ),
@@ -497,7 +497,7 @@ class _RecentActivitySection extends StatelessWidget {
           const Text('Recent Training Activity', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 20)),
           const SizedBox(height: 10),
           if (activities.isEmpty)
-            const Text('No recent activity yet. Start a scenario to build your timeline.', style: TextStyle(color: AppColors.textMuted))
+            Text('No recent activity yet. Start a scenario to build your timeline.', style: TextStyle(color: AppColors.textMuted))
           else
             ...activities.map((a) => _ActivityRow(item: a)),
         ],
@@ -533,14 +533,14 @@ class _ActivityRow extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(item.title, style: const TextStyle(fontWeight: FontWeight.w700)),
+                  Text(item.title, style: TextStyle(fontWeight: FontWeight.w700)),
                   const SizedBox(height: 2),
-                  Text(item.subtitle, style: const TextStyle(color: AppColors.textMuted, fontSize: 12)),
+                  Text(item.subtitle, style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
                 ],
               ),
             ),
             const SizedBox(width: 10),
-            Text(item.meta, style: const TextStyle(color: AppColors.textMuted, fontSize: 11)),
+            Text(item.meta, style: TextStyle(color: AppColors.textMuted, fontSize: 11)),
           ],
         ),
       ),

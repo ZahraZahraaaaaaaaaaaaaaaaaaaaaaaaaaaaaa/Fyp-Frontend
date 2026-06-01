@@ -62,7 +62,7 @@ class _NotificationToastState extends State<NotificationToast> with SingleTicker
             margin: const EdgeInsets.only(bottom: 10),
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: const Color(0xFF0D1426),
+              color: AppColors.toastSurface,
               borderRadius: BorderRadius.circular(14),
               border: Border.all(color: accent.withValues(alpha: 0.55)),
               boxShadow: [
@@ -98,14 +98,14 @@ class _NotificationToastState extends State<NotificationToast> with SingleTicker
                     children: [
                       Text(
                         widget.notification.title,
-                        style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13),
+                        style: TextStyle(fontWeight: FontWeight.w800, fontSize: 13),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         widget.notification.message,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(color: AppColors.textMuted, fontSize: 12, height: 1.35),
+                        style: TextStyle(color: AppColors.textMuted, fontSize: 12, height: 1.35),
                       ),
                     ],
                   ),

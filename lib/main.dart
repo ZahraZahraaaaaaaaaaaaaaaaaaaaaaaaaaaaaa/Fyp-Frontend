@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'providers/auth_provider.dart';
 import 'providers/dashboard_provider.dart';
 import 'providers/notification_provider.dart';
+import 'providers/theme_provider.dart';
 import 'routes/app_router.dart';
 import 'services/api_service.dart';
 import 'theme/app_theme.dart';
@@ -15,6 +16,8 @@ Future<void> main() async {
   final api = ApiService();
   final dashboard = DashboardProvider();
   final notifications = NotificationProvider(api);
+  final themeProvider = ThemeProvider();
+  await themeProvider.hydrate();
   final auth = AuthProvider(
     api,
     onSessionCleared: () {
@@ -31,6 +34,7 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         Provider<ApiService>.value(value: api),
+        ChangeNotifierProvider<ThemeProvider>.value(value: themeProvider),
         ChangeNotifierProvider<DashboardProvider>.value(value: dashboard),
         ChangeNotifierProvider<AuthProvider>.value(value: auth),
         ChangeNotifierProvider<NotificationProvider>.value(value: notifications),
@@ -47,13 +51,23 @@ class SocialEngineeringApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Cybersecurity Awareness Training',
-      theme: buildAppTheme(),
-      routerConfig: router,
-      builder: (context, child) {
-        return NotificationToastHost(
-          child: child ?? const SizedBox.shrink(),
+    return Consumer<ThemeProvider>(
+      builder: (context, themeProvider, _) {
+        final themeData = buildAppTheme(isDark: themeProvider.isDark);
+        return AnimatedTheme(
+          duration: const Duration(milliseconds: 400),
+          curve: Curves.easeInOut,
+          data: themeData,
+          child: MaterialApp.router(
+            title: 'Cybersecurity Awareness Training',
+            theme: themeData,
+            routerConfig: router,
+            builder: (context, child) {
+              return NotificationToastHost(
+                child: child ?? const SizedBox.shrink(),
+              );
+            },
+          ),
         );
       },
     );

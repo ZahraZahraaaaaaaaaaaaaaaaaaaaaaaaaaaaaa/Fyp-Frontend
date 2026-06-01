@@ -6,6 +6,7 @@ import '../providers/auth_provider.dart';
 import '../theme/app_colors.dart';
 import '../theme/design_tokens.dart';
 import 'notification_bell.dart';
+import 'theme_mode_toggle.dart';
 
 /// App shell inspired by `figma_ui/src/components/EmployeeNavbar.tsx` + drawer for small widths.
 class MainScaffold extends StatelessWidget {
@@ -65,7 +66,7 @@ class MainScaffold extends StatelessWidget {
                         ),
                         Text(
                           title,
-                          style: const TextStyle(color: AppColors.textMuted, fontSize: 12, fontWeight: FontWeight.w500),
+                          style: TextStyle(color: AppColors.textMuted, fontSize: 12, fontWeight: FontWeight.w500),
                           overflow: TextOverflow.ellipsis,
                         ),
                       ],
@@ -75,6 +76,8 @@ class MainScaffold extends StatelessWidget {
               ),
               actions: [
                 if (actions != null) ...actions!,
+                const ThemeModeToggle(),
+                const SizedBox(width: 4),
                 const NotificationBell(compact: true),
                 IconButton(
                   tooltip: 'Profile',
@@ -82,7 +85,7 @@ class MainScaffold extends StatelessWidget {
                   icon: CircleAvatar(
                     radius: 16,
                     backgroundColor: AppColors.surface2,
-                    child: Text(initial, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14)),
+                    child: Text(initial, style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14)),
                   ),
                 ),
               ],
@@ -113,11 +116,11 @@ class MainScaffold extends StatelessWidget {
                           child: const Icon(Icons.shield_outlined, color: Colors.white),
                         ),
                         const SizedBox(height: 12),
-                        const Text(
+                        Text(
                           'SecureLearn',
                           style: TextStyle(color: AppColors.text, fontSize: 18, fontWeight: FontWeight.w800),
                         ),
-                        const Text(
+                        Text(
                           'Security awareness training',
                           style: TextStyle(color: AppColors.textMuted, fontSize: 13),
                         ),
@@ -183,23 +186,27 @@ class _DesktopTopBar extends StatelessWidget {
     final auth = context.watch<AuthProvider>();
     final u = auth.user;
     final initial = (u?.fullName ?? 'U').isNotEmpty ? u!.fullName[0].toUpperCase() : 'U';
-    return Container(
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeInOut,
       height: 56,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: const Color(0xFF060F22),
+        color: AppColors.topBar,
         border: Border(bottom: BorderSide(color: AppColors.border.withValues(alpha: 0.8))),
       ),
       child: Row(
         children: [
-          Text(title, style: const TextStyle(color: AppColors.textMuted, fontWeight: FontWeight.w700)),
+          Text(title, style: TextStyle(color: AppColors.textMuted, fontWeight: FontWeight.w700)),
           const Spacer(),
+          const ThemeModeToggle(),
+          const SizedBox(width: 8),
           const NotificationBell(),
           const SizedBox(width: 4),
           CircleAvatar(
             radius: 14,
             backgroundColor: AppColors.surface2,
-            child: Text(initial, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 12)),
+            child: Text(initial, style: TextStyle(fontWeight: FontWeight.w800, fontSize: 12)),
           ),
           if (actions != null) ...actions!,
         ],
@@ -224,10 +231,12 @@ class _DesktopSidebar extends StatelessWidget {
     final auth = context.watch<AuthProvider>();
     final u = auth.user;
     final initial = (u?.fullName ?? 'U').isNotEmpty ? u!.fullName[0].toUpperCase() : 'U';
-    return Container(
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeInOut,
       width: 220,
       decoration: BoxDecoration(
-        color: const Color(0xFF060D1D),
+        color: AppColors.sidebar,
         border: Border(right: BorderSide(color: AppColors.border.withValues(alpha: 0.8))),
       ),
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 12),
@@ -248,7 +257,7 @@ class _DesktopSidebar extends StatelessWidget {
                 CircleAvatar(
                   radius: 16,
                   backgroundColor: AppColors.primary.withValues(alpha: 0.18),
-                  child: Text(initial, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 12)),
+                  child: Text(initial, style: TextStyle(fontWeight: FontWeight.w800, fontSize: 12)),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
@@ -259,11 +268,11 @@ class _DesktopSidebar extends StatelessWidget {
                         u?.fullName ?? 'Operator',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 12),
+                        style: TextStyle(fontWeight: FontWeight.w700, fontSize: 12),
                       ),
                       Text(
                         'LEVEL ${u?.level ?? 1} OPERATOR',
-                        style: const TextStyle(color: AppColors.textMuted, fontSize: 10),
+                        style: TextStyle(color: AppColors.textMuted, fontSize: 10),
                       ),
                     ],
                   ),

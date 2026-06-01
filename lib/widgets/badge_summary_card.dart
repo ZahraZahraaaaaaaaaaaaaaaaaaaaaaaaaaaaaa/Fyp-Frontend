@@ -48,11 +48,11 @@ class BadgeSummaryCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: const TextStyle(fontSize: 11, color: AppColors.textMuted, fontWeight: FontWeight.w700)),
+                Text(title, style: TextStyle(fontSize: 11, color: AppColors.textMuted, fontWeight: FontWeight.w700)),
                 const SizedBox(height: 4),
                 Text(value, style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800)),
                 const SizedBox(height: 2),
-                Text(subtitle, style: const TextStyle(fontSize: 11, color: AppColors.textMuted)),
+                Text(subtitle, style: TextStyle(fontSize: 11, color: AppColors.textMuted)),
               ],
             ),
           ),
@@ -89,7 +89,7 @@ class _ProgressRing extends StatelessWidget {
           Center(
             child: Text(
               '${(progress * 100).round()}%',
-              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w700),
+              style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700),
             ),
           ),
         ],

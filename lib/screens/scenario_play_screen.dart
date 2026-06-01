@@ -223,7 +223,7 @@ class _ScenarioPlayScreenState extends State<ScenarioPlayScreen> {
             ),
             child: SelectableText(
               step?.content ?? '',
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'monospace',
                 fontSize: 14,
                 height: 1.45,
@@ -250,15 +250,15 @@ class _ScenarioPlayScreenState extends State<ScenarioPlayScreen> {
                       alignment: Alignment.centerLeft,
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                       backgroundColor: AppColors.surface2,
-                      side: const BorderSide(color: AppColors.border, width: 1.5),
+                      side: BorderSide(color: AppColors.border, width: 1.5),
                       foregroundColor: AppColors.text,
                     ),
                     onPressed: _submitting ? null : () => _onPick(i),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Padding(
-                          padding: EdgeInsets.only(top: 2),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 2),
                           child: Icon(Icons.radio_button_unchecked, size: 18, color: AppColors.textMuted),
                         ),
                         const SizedBox(width: 10),
@@ -301,7 +301,7 @@ class _ScenarioPlayScreenState extends State<ScenarioPlayScreen> {
                   ),
                   const SizedBox(width: 10),
                   Expanded(
-                    child: Text(line, style: const TextStyle(color: AppColors.textMuted, height: 1.35, fontSize: 13)),
+                    child: Text(line, style: TextStyle(color: AppColors.textMuted, height: 1.35, fontSize: 13)),
                   ),
                 ],
               ),
@@ -318,9 +318,9 @@ class _ScenarioPlayScreenState extends State<ScenarioPlayScreen> {
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   Text('Pro tip', style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.w800)),
-                  SizedBox(height: 6),
+                  const SizedBox(height: 6),
                   Text(
                     'When in doubt, verify through a trusted channel (official portal, internal directory, or known callback number) before clicking, transferring, or sharing data.',
                     style: TextStyle(color: AppColors.textMuted, height: 1.35, fontSize: 13),
@@ -353,7 +353,7 @@ class _ScenarioPlayScreenState extends State<ScenarioPlayScreen> {
                 ),
                 child: Text(
                   '$_score pts',
-                  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
                 ),
               ),
             ),
@@ -384,12 +384,12 @@ class _ScenarioPlayScreenState extends State<ScenarioPlayScreen> {
                                     children: [
                                       Text(
                                         'Step ${_currentStepIndex + 1} of $total',
-                                        style: const TextStyle(color: AppColors.textMuted, fontWeight: FontWeight.w600),
+                                        style: TextStyle(color: AppColors.textMuted, fontWeight: FontWeight.w600),
                                       ),
                                       const Spacer(),
                                       Text(
                                         step?.contextLabel ?? '',
-                                        style: const TextStyle(color: AppColors.textMuted, fontSize: 12),
+                                        style: TextStyle(color: AppColors.textMuted, fontSize: 12),
                                       ),
                                     ],
                                   ),
@@ -423,12 +423,12 @@ class _ScenarioPlayScreenState extends State<ScenarioPlayScreen> {
                               children: [
                                 Text(
                                   'Step ${_currentStepIndex + 1} of $total',
-                                  style: const TextStyle(color: AppColors.textMuted, fontWeight: FontWeight.w600),
+                                  style: TextStyle(color: AppColors.textMuted, fontWeight: FontWeight.w600),
                                 ),
                                 const Spacer(),
                                 Text(
                                   step?.contextLabel ?? '',
-                                  style: const TextStyle(color: AppColors.textMuted, fontSize: 12),
+                                  style: TextStyle(color: AppColors.textMuted, fontSize: 12),
                                 ),
                               ],
                             ),

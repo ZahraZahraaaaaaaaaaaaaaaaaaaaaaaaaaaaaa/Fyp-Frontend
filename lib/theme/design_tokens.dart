@@ -10,9 +10,9 @@ abstract final class DesignTokens {
   static const double componentHeight = 44;
 
   /// globals.css --shadow-card
-  static List<BoxShadow> shadowCard(Color base) => [
+  static List<BoxShadow> shadowCard(Color base, {double alpha = 0.35}) => [
         BoxShadow(
-          color: Colors.black.withValues(alpha: 0.35),
+          color: base.withValues(alpha: alpha),
           blurRadius: 18,
           offset: const Offset(0, 6),
         ),

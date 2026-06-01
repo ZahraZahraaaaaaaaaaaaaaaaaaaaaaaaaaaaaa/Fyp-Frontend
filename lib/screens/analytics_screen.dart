@@ -76,7 +76,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w900),
           ),
           const SizedBox(height: 6),
-          const Text(
+          Text(
             'Track performance across completed attempts — accuracy, strengths, and focus areas.',
             style: TextStyle(color: AppColors.textMuted, height: 1.4),
           ),
@@ -200,11 +200,11 @@ class _MetricCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: const TextStyle(color: AppColors.textMuted, fontSize: 11)),
+          Text(label, style: TextStyle(color: AppColors.textMuted, fontSize: 11)),
           const SizedBox(height: 6),
           Text(value, style: TextStyle(color: accent, fontSize: 28, fontWeight: FontWeight.w800)),
           const SizedBox(height: 2),
-          Text(hint, style: const TextStyle(color: AppColors.textMuted, fontSize: 11)),
+          Text(hint, style: TextStyle(color: AppColors.textMuted, fontSize: 11)),
         ],
       ),
     );
@@ -225,7 +225,7 @@ class _WeaknessesCard extends StatelessWidget {
           const Text('Weaknesses', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18)),
           const SizedBox(height: 12),
           if (weaknesses.isEmpty)
-            const Text('No major weaknesses detected yet.', style: TextStyle(color: AppColors.textMuted))
+            Text('No major weaknesses detected yet.', style: TextStyle(color: AppColors.textMuted))
           else
             ...weaknesses.take(4).map((s) {
               final m = s as Map<String, dynamic>;
@@ -235,7 +235,7 @@ class _WeaknessesCard extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 10),
                 child: Row(
                   children: [
-                    SizedBox(width: 90, child: Text(type, style: const TextStyle(color: AppColors.textMuted, fontSize: 12))),
+                    SizedBox(width: 90, child: Text(type, style: TextStyle(color: AppColors.textMuted, fontSize: 12))),
                     Expanded(
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(999),
@@ -248,7 +248,7 @@ class _WeaknessesCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 8),
-                    Text('${pct.toStringAsFixed(0)}%', style: const TextStyle(color: Color(0xFFFF8A4A), fontWeight: FontWeight.w700, fontSize: 12)),
+                    Text('${pct.toStringAsFixed(0)}%', style: TextStyle(color: Color(0xFFFF8A4A), fontWeight: FontWeight.w700, fontSize: 12)),
                   ],
                 ),
               );
@@ -292,12 +292,12 @@ class _RecommendationCard extends StatelessWidget {
               children: [
                 Text(
                   'Focus on ${suggested.toLowerCase()} fundamentals',
-                  style: const TextStyle(color: AppColors.success, fontWeight: FontWeight.w700),
+                  style: TextStyle(color: AppColors.success, fontWeight: FontWeight.w700),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   'Suggested: ${suggested.toLowerCase()} content',
-                  style: const TextStyle(color: AppColors.textMuted, fontSize: 12),
+                  style: TextStyle(color: AppColors.textMuted, fontSize: 12),
                 ),
               ],
             ),
@@ -305,13 +305,13 @@ class _RecommendationCard extends StatelessWidget {
           const SizedBox(height: 10),
           Text(
             recReason,
-            style: const TextStyle(color: AppColors.textMuted, height: 1.35),
+            style: TextStyle(color: AppColors.textMuted, height: 1.35),
           ),
           if (remainingToTarget > 0) ...[
             const SizedBox(height: 8),
             Text(
               'Complete about $remainingToTarget more scenarios to unlock higher-tier recommendations.',
-              style: const TextStyle(color: AppColors.textMuted, fontSize: 12),
+              style: TextStyle(color: AppColors.textMuted, fontSize: 12),
             ),
           ],
         ],
@@ -333,7 +333,7 @@ class _StrengthsCard extends StatelessWidget {
           const Text('Strengths', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18)),
           const SizedBox(height: 10),
           if (strengths.isEmpty)
-            const Text('Strengths appear after more completions.', style: TextStyle(color: AppColors.textMuted))
+            Text('Strengths appear after more completions.', style: TextStyle(color: AppColors.textMuted))
           else
             Wrap(
               spacing: 8,
@@ -349,7 +349,7 @@ class _StrengthsCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(999),
                     border: Border.all(color: AppColors.border),
                   ),
-                  child: Text('$type  $pct%', style: const TextStyle(color: AppColors.textMuted, fontSize: 12)),
+                  child: Text('$type  $pct%', style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
                 );
               }).toList(),
             ),

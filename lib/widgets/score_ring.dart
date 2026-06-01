@@ -52,7 +52,7 @@ class ScoreRing extends StatelessWidget {
               ),
               Text(
                 label ?? 'Score',
-                style: const TextStyle(color: AppColors.textMuted, fontWeight: FontWeight.w600),
+                style: TextStyle(color: AppColors.textMuted, fontWeight: FontWeight.w600),
               ),
             ],
           ),
