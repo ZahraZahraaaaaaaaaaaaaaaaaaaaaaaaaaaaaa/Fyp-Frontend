@@ -59,8 +59,6 @@ class _ScenarioListScreenState extends State<ScenarioListScreen> {
 
     return MainScaffold(
       title: 'Scenarios',
-      sidebarCtaLabel: 'Start Daily Drill',
-      sidebarCtaRoute: '/scenarios',
       actions: [
         IconButton(onPressed: _load, icon: const Icon(Icons.refresh)),
       ],

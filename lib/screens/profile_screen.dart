@@ -63,8 +63,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return MainScaffold(
       title: 'Profile',
-      sidebarCtaLabel: 'Deploy Mission',
-      sidebarCtaRoute: '/scenarios',
       child: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 28),
         child: Column(

@@ -13,15 +13,11 @@ class MainScaffold extends StatelessWidget {
     required this.title,
     required this.child,
     this.actions,
-    this.sidebarCtaLabel = 'Deploy Mission',
-    this.sidebarCtaRoute = '/scenarios',
   });
 
   final String title;
   final Widget child;
   final List<Widget>? actions;
-  final String sidebarCtaLabel;
-  final String sidebarCtaRoute;
 
   bool _active(BuildContext context, String route) {
     final loc = GoRouterState.of(context).matchedLocation;
@@ -138,11 +134,7 @@ class MainScaffold extends StatelessWidget {
       body: desktop
           ? Row(
               children: [
-                _DesktopSidebar(
-                  title: title,
-                  ctaLabel: sidebarCtaLabel,
-                  ctaRoute: sidebarCtaRoute,
-                ),
+                const _DesktopSidebar(),
                 Expanded(
                   child: Column(
                     children: [
@@ -223,8 +215,6 @@ class _DesktopTopBar extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.notifications_none, size: 18)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.settings_outlined, size: 18)),
           const SizedBox(width: 4),
           CircleAvatar(
             radius: 14,
@@ -239,15 +229,7 @@ class _DesktopTopBar extends StatelessWidget {
 }
 
 class _DesktopSidebar extends StatelessWidget {
-  const _DesktopSidebar({
-    required this.title,
-    required this.ctaLabel,
-    required this.ctaRoute,
-  });
-
-  final String title;
-  final String ctaLabel;
-  final String ctaRoute;
+  const _DesktopSidebar();
 
   bool _active(BuildContext context, String route) {
     final loc = GoRouterState.of(context).matchedLocation;
@@ -317,17 +299,6 @@ class _DesktopSidebar extends StatelessWidget {
           _sidebarLink(context, '/profile', 'Profile', Icons.person_outline),
           if (auth.isAdmin) _sidebarLink(context, '/admin', 'Admin', Icons.admin_panel_settings_outlined),
           const Spacer(),
-          FilledButton(
-            onPressed: () => context.go(ctaRoute),
-            style: FilledButton.styleFrom(
-              minimumSize: const Size(double.infinity, 40),
-              backgroundColor: const Color(0xFFB3C7FF),
-              foregroundColor: const Color(0xFF122040),
-            ),
-            child: Text(ctaLabel),
-          ),
-          const SizedBox(height: 8),
-          TextButton.icon(onPressed: () {}, icon: const Icon(Icons.help_outline, size: 16), label: const Text('Support')),
           TextButton.icon(
             onPressed: () async {
               await auth.logout();

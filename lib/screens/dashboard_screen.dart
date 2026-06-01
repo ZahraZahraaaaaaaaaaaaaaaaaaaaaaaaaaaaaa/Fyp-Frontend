@@ -53,8 +53,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     if (dash.loading && snap == null) {
       return const MainScaffold(
         title: 'Dashboard',
-        sidebarCtaLabel: 'Deploy Mission',
-        sidebarCtaRoute: '/scenarios',
         child: Center(child: CircularProgressIndicator()),
       );
     }
@@ -62,8 +60,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     if (snap == null) {
       return MainScaffold(
         title: 'Dashboard',
-        sidebarCtaLabel: 'Deploy Mission',
-        sidebarCtaRoute: '/scenarios',
         child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -94,8 +90,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     return MainScaffold(
       title: 'Dashboard',
-      sidebarCtaLabel: 'Deploy Mission',
-      sidebarCtaRoute: '/scenarios',
       child: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 28),
         child: Column(

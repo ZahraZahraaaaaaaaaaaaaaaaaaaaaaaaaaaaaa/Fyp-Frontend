@@ -131,8 +131,6 @@ class BadgesScreen extends StatelessWidget {
 
     return MainScaffold(
       title: 'Achievements',
-      sidebarCtaLabel: 'Deploy Mission',
-      sidebarCtaRoute: '/scenarios',
       child: content,
     );
   }
