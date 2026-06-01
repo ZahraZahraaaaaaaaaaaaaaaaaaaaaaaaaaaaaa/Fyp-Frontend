@@ -29,6 +29,7 @@ class NotificationProvider extends ChangeNotifier {
   bool _loaded = false;
   int _toastSeq = 0;
   final Map<String, Timer> _toastTimers = {};
+  bool _loginToastsShown = false;
 
   List<NotificationModel> get items => List.unmodifiable(_items);
   List<NotificationToastEntry> get activeToasts => List.unmodifiable(_activeToasts);
@@ -47,6 +48,7 @@ class NotificationProvider extends ChangeNotifier {
     _loading = false;
     _loaded = false;
     _toastSeq = 0;
+    _loginToastsShown = false;
     notifyListeners();
   }
 
@@ -94,6 +96,34 @@ class NotificationProvider extends ChangeNotifier {
     _unreadCount = _countUnread();
     _loaded = true;
     notifyListeners();
+  }
+
+  /// Call after sign-in / register: loads notifications, then welcome toasts once per session.
+  Future<void> loadAfterAuth() async {
+    await load(force: true);
+    showOnboardingToastsIfNeeded();
+  }
+
+  /// Slide-in toasts for welcome (+ training reminder if unread). Not shown on cold app open.
+  void showOnboardingToastsIfNeeded() {
+    if (_loginToastsShown) return;
+    _loginToastsShown = true;
+
+    final onboarding = _items
+        .where((n) => (n.type == 'welcome' || n.type == 'reminder') && !n.isRead)
+        .toList();
+    onboarding.sort((a, b) {
+      if (a.type == 'welcome') return -1;
+      if (b.type == 'welcome') return 1;
+      return 0;
+    });
+
+    for (final n in onboarding) {
+      _enqueueToast(n);
+    }
+    if (onboarding.isNotEmpty) {
+      notifyListeners();
+    }
   }
 
   void ingestFromApiMaps(List<dynamic> raw) {

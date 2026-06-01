@@ -58,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (!mounted) return;
       await onLoginSuccessForBrowser(email: email, password: password);
       await context.read<DashboardProvider>().load(context.read<ApiService>());
-      await context.read<NotificationProvider>().load(force: true);
+      await context.read<NotificationProvider>().loadAfterAuth();
       if (!mounted) return;
       _passwordFocus.unfocus();
       context.go('/home');

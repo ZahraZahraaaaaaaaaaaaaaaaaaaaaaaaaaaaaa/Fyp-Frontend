@@ -43,7 +43,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             password: _password.text,
           );
       await context.read<DashboardProvider>().load(context.read<ApiService>());
-      await context.read<NotificationProvider>().load(force: true);
+      await context.read<NotificationProvider>().loadAfterAuth();
       if (mounted) context.go('/home');
     } on ApiException catch (e) {
       setState(() => _error = e.message);
