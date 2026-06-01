@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../data/platform_notices.dart';
 import '../models/notification_model.dart';
 import '../providers/notification_provider.dart';
 import '../theme/app_colors.dart';
@@ -119,21 +120,18 @@ class _NotificationPanel extends StatelessWidget {
     switch (type) {
       case 'badge_earned':
         return Icons.emoji_events_outlined;
+      case 'achievement_unlocked':
+        return Icons.military_tech_outlined;
       case 'scenario_completed':
         return Icons.check_circle_outline;
       case 'level_up':
         return Icons.star_outline;
-      case 'daily_challenge':
-        return Icons.bolt_outlined;
-      case 'training_reminder':
+      case 'reminder':
         return Icons.school_outlined;
       case 'welcome':
         return Icons.shield_outlined;
-      case 'badges_progress':
-        return Icons.workspace_premium_outlined;
-      case 'security_tip':
       default:
-        return Icons.lightbulb_outline;
+        return Icons.notifications_outlined;
     }
   }
 
@@ -141,11 +139,15 @@ class _NotificationPanel extends StatelessWidget {
     switch (type) {
       case 'badge_earned':
         return AppColors.warning;
+      case 'achievement_unlocked':
+        return AppColors.accentTeal;
       case 'scenario_completed':
         return AppColors.success;
       case 'level_up':
-        return AppColors.accentTeal;
-      case 'daily_challenge':
+        return AppColors.primary;
+      case 'reminder':
+        return AppColors.secondary;
+      case 'welcome':
         return AppColors.primary;
       default:
         return AppColors.secondary;
@@ -161,7 +163,7 @@ class _NotificationPanel extends StatelessWidget {
       color: Colors.transparent,
       child: Container(
         width: width,
-        constraints: const BoxConstraints(maxHeight: 460),
+        constraints: const BoxConstraints(maxHeight: 520),
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(16),
@@ -206,32 +208,64 @@ class _NotificationPanel extends StatelessWidget {
                       padding: EdgeInsets.all(32),
                       child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
                     )
-                  : provider.items.isEmpty
-                      ? const Padding(
-                          padding: EdgeInsets.all(28),
-                          child: Text(
-                            'No notifications yet.',
-                            style: TextStyle(color: AppColors.textMuted),
+                  : ListView(
+                      padding: const EdgeInsets.fromLTRB(12, 10, 12, 14),
+                      children: [
+                        const _SectionHeader(title: 'Your Notifications'),
+                        const SizedBox(height: 8),
+                        if (provider.items.isEmpty)
+                          const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 12),
+                            child: Text(
+                              'Activity notifications will appear here as you train.',
+                              style: TextStyle(color: AppColors.textMuted, fontSize: 12),
+                            ),
+                          )
+                        else
+                          ...provider.items.map(
+                            (n) => Padding(
+                              padding: const EdgeInsets.only(bottom: 8),
+                              child: _NotificationCard(
+                                notification: n,
+                                icon: _iconForType(n.type),
+                                accent: _accentForType(n.type),
+                                onTap: () => provider.markRead(n.id),
+                              ),
+                            ),
                           ),
-                        )
-                      : ListView.separated(
-                          shrinkWrap: true,
-                          padding: const EdgeInsets.fromLTRB(10, 8, 10, 12),
-                          itemCount: provider.items.length,
-                          separatorBuilder: (_, __) => const SizedBox(height: 8),
-                          itemBuilder: (context, index) {
-                            final n = provider.items[index];
-                            return _NotificationCard(
-                              notification: n,
-                              icon: _iconForType(n.type),
-                              accent: _accentForType(n.type),
-                              onTap: () => provider.markRead(n.id),
-                            );
-                          },
+                        const SizedBox(height: 12),
+                        const _SectionHeader(title: 'Security Tips & Challenges'),
+                        const SizedBox(height: 8),
+                        ...PlatformNotices.tipsAndChallenges.map(
+                          (notice) => Padding(
+                            padding: const EdgeInsets.only(bottom: 8),
+                            child: _PlatformNoticeCard(notice: notice),
+                          ),
                         ),
+                      ],
+                    ),
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _SectionHeader extends StatelessWidget {
+  const _SectionHeader({required this.title});
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      title,
+      style: const TextStyle(
+        fontSize: 11,
+        fontWeight: FontWeight.w800,
+        letterSpacing: 0.4,
+        color: AppColors.textMuted,
       ),
     );
   }
@@ -322,6 +356,73 @@ class _NotificationCard extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _PlatformNoticeCard extends StatelessWidget {
+  const _PlatformNoticeCard({required this.notice});
+
+  final PlatformNotice notice;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: AppColors.surface2.withValues(alpha: 0.5),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.border.withValues(alpha: 0.85)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+              color: notice.accent.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: notice.accent.withValues(alpha: 0.3)),
+            ),
+            child: Icon(notice.icon, size: 18, color: notice.accent),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        notice.title,
+                        style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: AppColors.border.withValues(alpha: 0.5),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: const Text(
+                        'Platform',
+                        style: TextStyle(color: AppColors.textMuted, fontSize: 9, fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  notice.message,
+                  style: const TextStyle(color: AppColors.textMuted, fontSize: 12, height: 1.35),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
