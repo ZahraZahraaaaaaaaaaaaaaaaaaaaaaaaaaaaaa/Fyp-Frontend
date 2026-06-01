@@ -1,28 +1,52 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 
 import '../models/notification_model.dart';
 import '../services/api_service.dart';
+import '../utils/notification_style.dart';
+
+class NotificationToastEntry {
+  NotificationToastEntry({
+    required this.toastKey,
+    required this.notification,
+  });
+
+  final String toastKey;
+  final NotificationModel notification;
+}
 
 class NotificationProvider extends ChangeNotifier {
   NotificationProvider(this._api);
 
   final ApiService _api;
+  static const Duration toastDuration = Duration(seconds: 4);
 
   List<NotificationModel> _items = [];
+  final List<NotificationToastEntry> _activeToasts = [];
   int _unreadCount = 0;
   bool _loading = false;
   bool _loaded = false;
+  int _toastSeq = 0;
+  final Map<String, Timer> _toastTimers = {};
 
   List<NotificationModel> get items => List.unmodifiable(_items);
+  List<NotificationToastEntry> get activeToasts => List.unmodifiable(_activeToasts);
   int get unreadCount => _unreadCount;
   bool get loading => _loading;
   bool get hasUnread => _unreadCount > 0;
 
   void reset() {
+    for (final t in _toastTimers.values) {
+      t.cancel();
+    }
+    _toastTimers.clear();
     _items = [];
+    _activeToasts.clear();
     _unreadCount = 0;
     _loading = false;
     _loaded = false;
+    _toastSeq = 0;
     notifyListeners();
   }
 
@@ -40,7 +64,7 @@ class NotificationProvider extends ChangeNotifier {
               .map(NotificationModel.fromJson)
               .toList()
           : [];
-      _unreadCount = (res['unreadCount'] as num?)?.toInt() ?? 0;
+      _unreadCount = (res['unreadCount'] as num?)?.toInt() ?? _countUnread();
       _loaded = true;
     } catch (_) {
       // Keep prior state on failure.
@@ -49,6 +73,55 @@ class NotificationProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  /// Merges session notifications into the dropdown and shows toasts (dynamic only).
+  void ingestSessionNotifications(List<NotificationModel> incoming) {
+    if (incoming.isEmpty) return;
+
+    for (final n in incoming) {
+      final idx = _items.indexWhere((i) => i.id == n.id);
+      if (idx >= 0) {
+        _items[idx] = n;
+      } else {
+        _items.insert(0, n);
+      }
+
+      if (NotificationStyle.isDynamicToastType(n.type)) {
+        _enqueueToast(n);
+      }
+    }
+
+    _unreadCount = _countUnread();
+    _loaded = true;
+    notifyListeners();
+  }
+
+  void ingestFromApiMaps(List<dynamic> raw) {
+    final list = raw
+        .whereType<Map<String, dynamic>>()
+        .map(NotificationModel.fromJson)
+        .toList();
+    ingestSessionNotifications(list);
+  }
+
+  void _enqueueToast(NotificationModel notification) {
+    final toastKey = 'toast_${_toastSeq++}_${notification.id}';
+    _activeToasts.insert(0, NotificationToastEntry(toastKey: toastKey, notification: notification));
+
+    _toastTimers[toastKey]?.cancel();
+    _toastTimers[toastKey] = Timer(toastDuration, () => dismissToast(toastKey));
+  }
+
+  void dismissToast(String toastKey) {
+    _toastTimers.remove(toastKey)?.cancel();
+    final before = _activeToasts.length;
+    _activeToasts.removeWhere((t) => t.toastKey == toastKey);
+    if (_activeToasts.length != before) {
+      notifyListeners();
+    }
+  }
+
+  int _countUnread() => _items.where((n) => !n.isRead).length;
 
   Future<void> markRead(String id) async {
     try {
@@ -63,7 +136,7 @@ class NotificationProvider extends ChangeNotifier {
           isRead: true,
           createdAt: _items[idx].createdAt,
         );
-        _unreadCount = (_unreadCount - 1).clamp(0, _items.length);
+        _unreadCount = _countUnread();
         notifyListeners();
       }
     } catch (_) {}

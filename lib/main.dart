@@ -8,6 +8,7 @@ import 'providers/notification_provider.dart';
 import 'routes/app_router.dart';
 import 'services/api_service.dart';
 import 'theme/app_theme.dart';
+import 'widgets/notification_toast_host.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,10 +47,12 @@ class SocialEngineeringApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Cybersecurity Awareness Training',
-      theme: buildAppTheme(),
-      routerConfig: router,
+    return NotificationToastHost(
+      child: MaterialApp.router(
+        title: 'Cybersecurity Awareness Training',
+        theme: buildAppTheme(),
+        routerConfig: router,
+      ),
     );
   }
 }

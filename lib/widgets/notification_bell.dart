@@ -5,6 +5,7 @@ import '../data/platform_notices.dart';
 import '../models/notification_model.dart';
 import '../providers/notification_provider.dart';
 import '../theme/app_colors.dart';
+import '../utils/notification_style.dart';
 import '../utils/notification_time.dart';
 
 class NotificationBell extends StatefulWidget {
@@ -116,44 +117,6 @@ class _NotificationPanel extends StatelessWidget {
 
   final VoidCallback onClose;
 
-  IconData _iconForType(String type) {
-    switch (type) {
-      case 'badge_earned':
-        return Icons.emoji_events_outlined;
-      case 'achievement_unlocked':
-        return Icons.military_tech_outlined;
-      case 'scenario_completed':
-        return Icons.check_circle_outline;
-      case 'level_up':
-        return Icons.star_outline;
-      case 'reminder':
-        return Icons.school_outlined;
-      case 'welcome':
-        return Icons.shield_outlined;
-      default:
-        return Icons.notifications_outlined;
-    }
-  }
-
-  Color _accentForType(String type) {
-    switch (type) {
-      case 'badge_earned':
-        return AppColors.warning;
-      case 'achievement_unlocked':
-        return AppColors.accentTeal;
-      case 'scenario_completed':
-        return AppColors.success;
-      case 'level_up':
-        return AppColors.primary;
-      case 'reminder':
-        return AppColors.secondary;
-      case 'welcome':
-        return AppColors.primary;
-      default:
-        return AppColors.secondary;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<NotificationProvider>();
@@ -227,8 +190,8 @@ class _NotificationPanel extends StatelessWidget {
                               padding: const EdgeInsets.only(bottom: 8),
                               child: _NotificationCard(
                                 notification: n,
-                                icon: _iconForType(n.type),
-                                accent: _accentForType(n.type),
+                                icon: NotificationStyle.iconForType(n.type),
+                                accent: NotificationStyle.accentForType(n.type),
                                 onTap: () => provider.markRead(n.id),
                               ),
                             ),

@@ -141,7 +141,13 @@ class _ScenarioPlayScreenState extends State<ScenarioPlayScreen> {
         if (!mounted) return;
         await context.read<AuthProvider>().refreshProfile();
         await context.read<DashboardProvider>().load(api);
-        await context.read<NotificationProvider>().load(force: true);
+        final newNotifRaw = complete['newNotifications'];
+        final notifProvider = context.read<NotificationProvider>();
+        if (newNotifRaw is List && newNotifRaw.isNotEmpty) {
+          notifProvider.ingestFromApiMaps(newNotifRaw);
+        } else {
+          await notifProvider.load(force: true);
+        }
         final afterBadges = (context.read<AuthProvider>().user?.earnedBadges ?? const <String>[]).toSet();
         final newlyEarned = afterBadges.difference(beforeBadges).toList()..sort();
         final att = complete['attempt'] as Map<String, dynamic>? ?? {};
