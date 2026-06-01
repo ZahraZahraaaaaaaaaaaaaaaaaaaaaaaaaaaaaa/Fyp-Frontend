@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 /// Spacing, radii, and shadows aligned with `figma_ui/src/styles/globals.css`
 /// and Figma components (Card, Button, ProgressBar).
+/// Typography: [AppTypography] (Inter) via [buildAppTheme].
 abstract final class DesignTokens {
   static const double radiusSm = 6;
   static const double radiusMd = 10;

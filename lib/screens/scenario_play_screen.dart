@@ -8,6 +8,7 @@ import '../providers/dashboard_provider.dart';
 import '../providers/notification_provider.dart';
 import '../services/api_service.dart';
 import '../theme/app_colors.dart';
+import '../theme/app_typography.dart';
 import '../theme/design_tokens.dart';
 import '../utils/scenario_red_flags.dart';
 import '../widgets/figma_progress_bar.dart';
@@ -223,11 +224,12 @@ class _ScenarioPlayScreenState extends State<ScenarioPlayScreen> {
             ),
             child: SelectableText(
               step?.content ?? '',
-              style: TextStyle(
-                fontFamily: 'monospace',
-                fontSize: 14,
-                height: 1.45,
-                color: AppColors.text,
+              style: AppTypography.mono(
+                TextStyle(
+                  fontSize: 14,
+                  height: 1.45,
+                  color: AppColors.text,
+                ),
               ),
             ),
           ),
