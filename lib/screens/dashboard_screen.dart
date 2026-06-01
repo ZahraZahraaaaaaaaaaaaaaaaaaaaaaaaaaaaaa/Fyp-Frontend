@@ -581,7 +581,7 @@ class _MiniBadgeRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Opacity(
-      opacity: unlocked ? 1 : 0.45,
+      opacity: unlocked ? 1 : 0.82,
       child: Row(
         children: [
           Container(
@@ -590,12 +590,12 @@ class _MiniBadgeRow extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               gradient: LinearGradient(colors: badge.faceGradient),
-              border: Border.all(color: badge.accentColor.withValues(alpha: 0.45)),
+              border: Border.all(color: badge.accentColor.withValues(alpha: unlocked ? 0.45 : 0.32)),
             ),
             child: Icon(
               badge.icon,
               size: 22,
-              color: unlocked ? Colors.white : Colors.white54,
+              color: unlocked ? AppColors.badgeMedalIcon : AppColors.badgeMedalIconLocked,
             ),
           ),
           const SizedBox(width: 10),
