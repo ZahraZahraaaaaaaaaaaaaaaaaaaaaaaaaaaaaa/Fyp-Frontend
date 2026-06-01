@@ -47,12 +47,15 @@ class SocialEngineeringApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return NotificationToastHost(
-      child: MaterialApp.router(
-        title: 'Cybersecurity Awareness Training',
-        theme: buildAppTheme(),
-        routerConfig: router,
-      ),
+    return MaterialApp.router(
+      title: 'Cybersecurity Awareness Training',
+      theme: buildAppTheme(),
+      routerConfig: router,
+      builder: (context, child) {
+        return NotificationToastHost(
+          child: child ?? const SizedBox.shrink(),
+        );
+      },
     );
   }
 }

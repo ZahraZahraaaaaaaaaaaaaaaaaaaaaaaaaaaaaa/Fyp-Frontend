@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../data/platform_notices.dart';
 import '../models/notification_model.dart';
 import '../providers/notification_provider.dart';
+import '../routes/app_router.dart';
 import '../theme/app_colors.dart';
 import '../utils/notification_style.dart';
 import '../utils/notification_time.dart';
@@ -28,27 +29,33 @@ class _NotificationBellState extends State<NotificationBell> {
 
   Future<void> _openPanel() async {
     final provider = context.read<NotificationProvider>();
-    await provider.load(force: true);
+    try {
+      await provider.load(force: true);
+    } catch (_) {
+      // Still open panel with cached items if fetch fails.
+    }
     if (!mounted) return;
 
-    final topInset = MediaQuery.of(context).padding.top;
-    final isDesktop = MediaQuery.sizeOf(context).width >= 1180;
+    final dialogContext = rootNavigatorKey.currentContext ?? context;
+    final topInset = MediaQuery.of(dialogContext).padding.top;
+    final isDesktop = MediaQuery.sizeOf(dialogContext).width >= 1180;
     final topOffset = topInset + (isDesktop ? 56 : kToolbarHeight) + 8;
 
     await showGeneralDialog<void>(
-      context: context,
+      context: dialogContext,
+      useRootNavigator: true,
       barrierDismissible: true,
       barrierLabel: 'Notifications',
       barrierColor: Colors.black.withValues(alpha: 0.45),
       transitionDuration: const Duration(milliseconds: 220),
-      pageBuilder: (dialogContext, animation, secondaryAnimation) {
+      pageBuilder: (overlayContext, animation, secondaryAnimation) {
         return SafeArea(
           child: Align(
             alignment: Alignment.topRight,
             child: Padding(
               padding: EdgeInsets.only(top: topOffset, right: 12, left: 12),
               child: _NotificationPanel(
-                onClose: () => Navigator.of(dialogContext).pop(),
+                onClose: () => Navigator.of(overlayContext).pop(),
               ),
             ),
           ),

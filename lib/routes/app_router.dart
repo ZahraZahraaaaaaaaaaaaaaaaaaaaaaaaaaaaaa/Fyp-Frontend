@@ -14,11 +14,12 @@ import '../screens/register_screen.dart';
 import '../screens/scenario_list_screen.dart';
 import '../screens/scenario_play_screen.dart';
 
-final _rootKey = GlobalKey<NavigatorState>();
+/// Root navigator for dialogs and overlays (e.g. notification panel).
+final rootNavigatorKey = GlobalKey<NavigatorState>();
 
 GoRouter createRouter(AuthProvider auth) {
   return GoRouter(
-    navigatorKey: _rootKey,
+    navigatorKey: rootNavigatorKey,
     refreshListenable: auth,
     initialLocation: '/home',
     redirect: (context, state) {
