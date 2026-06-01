@@ -86,7 +86,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final pending = snap.remainingScenariosCount;
     final recommended = _recommendedScenario(scenarios, completedIds);
     final earned = snap.earnedBadges;
-    final rank = _rankLabel(snap.level);
 
     return MainScaffold(
       title: 'Dashboard',
@@ -95,43 +94,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Welcome back, ${u?.fullName ?? 'Operator'}',
-                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        'Your sector is currently secure. $pending pending training modules required.',
-                        style: const TextStyle(color: AppColors.textMuted),
-                      ),
-                    ],
-                  ),
+                Text(
+                  'Welcome back, ${u?.fullName ?? 'Operator'}',
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
                 ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: AppColors.surface2,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: AppColors.border),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(Icons.workspace_premium_outlined, size: 16, color: AppColors.primary),
-                      const SizedBox(width: 8),
-                      Text(
-                        '$rank OPERATOR',
-                        style: const TextStyle(color: AppColors.textMuted, fontWeight: FontWeight.w700, fontSize: 12),
-                      ),
-                    ],
-                  ),
+                const SizedBox(height: 6),
+                Text(
+                  'Your sector is currently secure. $pending pending training modules required.',
+                  style: const TextStyle(color: AppColors.textMuted),
                 ),
               ],
             ),
@@ -254,11 +227,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return scenarios.first;
   }
 
-  String _rankLabel(int level) {
-    if (level >= 10) return 'SILVER TIER';
-    if (level >= 6) return 'BRONZE TIER';
-    return 'BASE TIER';
-  }
 }
 
 class _SummaryCard extends StatelessWidget {

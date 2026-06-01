@@ -192,30 +192,6 @@ class _DesktopTopBar extends StatelessWidget {
         children: [
           Text(title, style: const TextStyle(color: AppColors.textMuted, fontWeight: FontWeight.w700)),
           const Spacer(),
-          Container(
-            width: 220,
-            height: 36,
-            decoration: BoxDecoration(
-              color: AppColors.surface2,
-              borderRadius: BorderRadius.circular(999),
-              border: Border.all(color: AppColors.border),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: const Row(
-              children: [
-                Icon(Icons.search, size: 16, color: AppColors.textMuted),
-                SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    'Search Intel...',
-                    style: TextStyle(color: AppColors.textMuted, fontSize: 12),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 8),
-          const SizedBox(width: 4),
           CircleAvatar(
             radius: 14,
             backgroundColor: AppColors.surface2,

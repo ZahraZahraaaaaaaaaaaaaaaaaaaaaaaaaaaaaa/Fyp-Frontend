@@ -287,20 +287,6 @@ class _ProfileHeroCard extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(width: 12),
-              Column(
-                children: [
-                  FilledButton(
-                    onPressed: () {},
-                    child: const Text('Edit Profile'),
-                  ),
-                  const SizedBox(height: 8),
-                  OutlinedButton(
-                    onPressed: () {},
-                    child: const Icon(Icons.share_outlined, size: 18),
-                  ),
-                ],
-              ),
             ],
           ),
           const SizedBox(height: 16),
