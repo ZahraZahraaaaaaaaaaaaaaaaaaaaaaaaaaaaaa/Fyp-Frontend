@@ -99,7 +99,7 @@ class _ScenarioListScreenState extends State<ScenarioListScreen> {
                         ),
                       ),
                       SliverPadding(
-                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
+                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 28),
                         sliver: SliverToBoxAdapter(
                           child: LayoutBuilder(
                             builder: (context, c) {
@@ -130,23 +130,6 @@ class _ScenarioListScreenState extends State<ScenarioListScreen> {
                           ),
                         ),
                       ),
-                      SliverPadding(
-                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 28),
-                        sliver: SliverToBoxAdapter(
-                          child: _DailyChallengeBanner(
-                            completedCount: completedCount,
-                            totalScenarios: total,
-                            hint: completedCount >= 2
-                                ? 'Mission streak active — keep training to earn bonus XP.'
-                                : 'Complete 2 scenarios to unlock your daily bonus.',
-                            nextScenarioId: _nextPlayableScenarioId(
-                              visible,
-                              completedIds,
-                              userLevel,
-                            ),
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                 ),
@@ -167,19 +150,6 @@ class _ScenarioListScreenState extends State<ScenarioListScreen> {
       default:
         return 1;
     }
-  }
-
-  String? _nextPlayableScenarioId(
-    List<ScenarioModel> scenarios,
-    Set<String> completedIds,
-    int userLevel,
-  ) {
-    for (final s in scenarios) {
-      if (completedIds.contains(s.id)) continue;
-      if (_isLocked(s, userLevel)) continue;
-      return s.id;
-    }
-    return null;
   }
 
   List<_ScenarioCategory> _buildCategories(List<ScenarioModel> items) {
@@ -572,112 +542,5 @@ class _ScenarioGridCardState extends State<_ScenarioGridCard> {
         .where((w) => w.isNotEmpty)
         .map((w) => '${w[0].toUpperCase()}${w.substring(1)}')
         .join(' ');
-  }
-}
-
-class _DailyChallengeBanner extends StatelessWidget {
-  const _DailyChallengeBanner({
-    required this.completedCount,
-    required this.totalScenarios,
-    required this.hint,
-    required this.nextScenarioId,
-  });
-
-  final int completedCount;
-  final int totalScenarios;
-  final String hint;
-  final String? nextScenarioId;
-
-  bool get _eligibleForBonus => completedCount >= 2;
-
-  void _onClaimPressed(BuildContext context) {
-    showDialog<void>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Daily Streak Challenge'),
-        content: Text(
-          _eligibleForBonus
-              ? 'You have completed $completedCount of $totalScenarios scenarios. '
-                  'A daily bonus would add extra XP to your profile once per day when you finish at least 2 training modules.\n\n'
-                  'Keep playing scenarios to raise your score, level, and badges.'
-              : 'Complete at least 2 scenarios to activate your daily streak bonus. '
-                  'Progress: $completedCount / 2 required.\n\n'
-                  'Start a mission below to move toward today\'s bonus.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text('Close'),
-          ),
-          if (nextScenarioId != null)
-            FilledButton(
-              onPressed: () {
-                Navigator.pop(ctx);
-                context.go('/scenarios/$nextScenarioId/play');
-              },
-              child: const Text('Start next mission'),
-            )
-          else
-            FilledButton(
-              onPressed: () {
-                Navigator.pop(ctx);
-                context.go('/badges');
-              },
-              child: const Text('View achievements'),
-            ),
-        ],
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(18, 18, 18, 18),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        gradient: const LinearGradient(
-          colors: [Color(0xFF0A4CC2), Color(0xFF0B7FA5)],
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.primary.withValues(alpha: 0.25),
-            blurRadius: 24,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Daily Streak Challenge',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  hint,
-                  style: TextStyle(color: Color(0xFFD6E6FF), height: 1.35),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 12),
-          FilledButton(
-            onPressed: () => _onClaimPressed(context),
-            style: FilledButton.styleFrom(
-              backgroundColor: Colors.white,
-              foregroundColor: const Color(0xFF15408C),
-              minimumSize: const Size(150, 44),
-            ),
-            child: Text(_eligibleForBonus ? 'Claim Daily Bonus' : 'View challenge'),
-          ),
-        ],
-                ),
-    );
   }
 }
