@@ -4,13 +4,47 @@ import 'package:provider/provider.dart';
 import '../badges/badge_catalog.dart';
 import '../providers/auth_provider.dart';
 import '../providers/theme_provider.dart';
+import '../services/api_service.dart';
 import '../theme/app_colors.dart';
 import '../widgets/badge_gallery_card.dart';
 import '../widgets/badge_summary_card.dart';
 import '../widgets/main_scaffold.dart';
 
-class BadgesScreen extends StatelessWidget {
+class BadgesScreen extends StatefulWidget {
   const BadgesScreen({super.key});
+
+  @override
+  State<BadgesScreen> createState() => _BadgesScreenState();
+}
+
+class _BadgesScreenState extends State<BadgesScreen> {
+  // Real cross-user rank from GET /api/analytics/me. Null until it loads (or
+  // if the request fails), in which case we fall back to a locally-estimated
+  // value so the screen still renders something reasonable.
+  int? _realTopPercentile;
+  int? _totalUsers;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _loadRank());
+  }
+
+  Future<void> _loadRank() async {
+    try {
+      final api = context.read<ApiService>();
+      final data = await api.analytics();
+      final rank = data['globalRank'] as Map<String, dynamic>?;
+      if (!mounted || rank == null) return;
+      setState(() {
+        _realTopPercentile = rank['topPercentile'] as int?;
+        _totalUsers = rank['totalUsers'] as int?;
+      });
+    } catch (_) {
+      // Keep the badges screen functional even if analytics is unreachable;
+      // the estimated fallback below still renders.
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +56,11 @@ class BadgesScreen extends StatelessWidget {
     final achievementPoints = BadgeCatalog.all
         .where((b) => earned.contains(b.id))
         .fold<int>(0, (sum, b) => sum + b.points);
-    final percentile = (12 + ((1 - completion) * 28)).round().clamp(1, 99);
+    final estimatedPercentile = (12 + ((1 - completion) * 28)).round().clamp(1, 99);
+    final percentile = _realTopPercentile ?? estimatedPercentile;
+    final percentileSubtitle = _realTopPercentile != null
+        ? 'Rank among $_totalUsers registered user${_totalUsers == 1 ? '' : 's'}'
+        : 'Estimated — rank snapshot';
 
     final content = Container(
       decoration: BoxDecoration(
@@ -75,7 +113,7 @@ class BadgesScreen extends StatelessWidget {
                   BadgeSummaryCard(
                     title: 'Global Percentile',
                     value: 'Top $percentile%',
-                    subtitle: 'Rank snapshot',
+                    subtitle: percentileSubtitle,
                     accent: const Color(0xFF8DA4FF),
                     icon: Icons.trending_up_rounded,
                   ),

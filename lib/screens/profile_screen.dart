@@ -51,8 +51,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final totalScore = u?.totalScore ?? 0;
     final completed = u?.completedScenarios.length ?? 0;
     final earnedBadgeIds = (u?.earnedBadges ?? const <String>[]);
-    final xpCurrent = totalScore;
-    final xpTarget = _xpTargetForNextLevel(level);
+    final currentLevelFloor = _levelFloor(level);
+    final nextLevelFloor = _levelFloor(level + 1);
+    final xpCurrent = totalScore - currentLevelFloor;
+    final xpTarget = nextLevelFloor - currentLevelFloor;
     final xpProgress = xpTarget <= 0 ? 0.0 : (xpCurrent / xpTarget).clamp(0, 1).toDouble();
     final scenarioById = {for (final s in _scenarios) s.id: s};
     final recentActivities = _buildRecentActivities(
@@ -137,7 +139,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  int _xpTargetForNextLevel(int level) => (level + 1) * 500;
+  /// Minimum total score required to be at [level]. Must mirror backend
+  /// src/services/gamification.js scoreToLevel() exactly, since that function
+  /// (not this one) is the source of truth for the user's stored level.
+  int _levelFloor(int level) {
+    const floors = <int>[0, 0, 50, 125, 225, 350, 500];
+    if (level < floors.length) {
+      return floors[level.clamp(1, floors.length - 1)];
+    }
+    return 500 + (level - 6) * 250;
+  }
 
   List<_ProfileActivity> _buildRecentActivities({
     required List<String> completedScenarioIds,

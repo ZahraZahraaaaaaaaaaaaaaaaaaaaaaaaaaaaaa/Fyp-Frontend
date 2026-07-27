@@ -39,6 +39,13 @@ class _ScenarioPlayScreenState extends State<ScenarioPlayScreen> {
   bool _loading = true;
   bool _submitting = false;
 
+  /// Whether the attempt has actually been started. Steps come back from the
+  /// API in a randomized per-attempt order, so without an upfront intro
+  /// screen the first thing a user saw was already a shuffled question with
+  /// no context — this gates that behind an explanation screen first.
+  bool _started = false;
+  bool _starting = false;
+
   ScenarioStep? get _step {
     final s = _scenario;
     if (s == null) return null;
@@ -63,6 +70,23 @@ class _ScenarioPlayScreenState extends State<ScenarioPlayScreen> {
     try {
       final sMap = await api.scenario(widget.scenarioId);
       _scenario = ScenarioModel.fromJson(sMap);
+    } on ApiException catch (e) {
+      _error = e.message;
+    } catch (e) {
+      _error = e.toString();
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  Future<void> _beginSimulation() async {
+    final api = context.read<ApiService>();
+    if (_starting) return;
+    setState(() {
+      _starting = true;
+      _error = null;
+    });
+    try {
       final start = await api.startAttempt(widget.scenarioId);
       final a = start['attempt'] as Map<String, dynamic>;
       _attemptId = a['id']?.toString();
@@ -74,12 +98,17 @@ class _ScenarioPlayScreenState extends State<ScenarioPlayScreen> {
       _score = (a['score'] as num?)?.toInt() ?? 0;
       _correct = (a['correctDecisions'] as num?)?.toInt() ?? 0;
       _incorrect = (a['incorrectDecisions'] as num?)?.toInt() ?? 0;
+      if (mounted) setState(() => _started = true);
     } on ApiException catch (e) {
-      _error = e.message;
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.message)));
+      }
     } catch (e) {
-      _error = e.toString();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+      }
     } finally {
-      if (mounted) setState(() => _loading = false);
+      if (mounted) setState(() => _starting = false);
     }
   }
 
@@ -199,6 +228,11 @@ class _ScenarioPlayScreenState extends State<ScenarioPlayScreen> {
       );
     }
     final scenario = _scenario!;
+
+    if (!_started) {
+      return _buildIntro(context, scenario);
+    }
+
     final step = _step;
     final total = _stepOrder.isNotEmpty ? _stepOrder.length : scenario.steps.length;
     final progressPct = total == 0 ? 0.0 : ((_currentStepIndex + 1) / total * 100);
@@ -210,7 +244,7 @@ class _ScenarioPlayScreenState extends State<ScenarioPlayScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Simulation',
+            'The Situation',
             style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 10),
@@ -450,6 +484,110 @@ class _ScenarioPlayScreenState extends State<ScenarioPlayScreen> {
                   ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildIntro(BuildContext context, ScenarioModel scenario) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => context.go('/scenarios'),
+        ),
+        title: Text(scenario.title, maxLines: 1, overflow: TextOverflow.ellipsis),
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [AppColors.authGradientStart, AppColors.authGradientEnd],
+          ),
+        ),
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 640),
+              child: Container(
+                padding: const EdgeInsets.all(28),
+                decoration: BoxDecoration(
+                  color: AppColors.surface,
+                  borderRadius: BorderRadius.circular(DesignTokens.radiusLg),
+                  border: Border.all(color: AppColors.border),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.25),
+                      blurRadius: 32,
+                      offset: const Offset(0, 16),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _metaRow(context, scenario),
+                    const SizedBox(height: 16),
+                    Text(
+                      scenario.title,
+                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w900),
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Icon(Icons.info_outline_rounded, color: AppColors.primary, size: 20),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Scenario briefing',
+                          style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      scenario.description.isNotEmpty
+                          ? scenario.description
+                          : 'No description provided for this scenario.',
+                      style: TextStyle(color: AppColors.textMuted, height: 1.45, fontSize: 14),
+                    ),
+                    const SizedBox(height: 16),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withValues(alpha: 0.08),
+                        borderRadius: BorderRadius.circular(DesignTokens.radiusMd),
+                        border: Border.all(color: AppColors.primary.withValues(alpha: 0.25)),
+                      ),
+                      child: Text(
+                        "You'll face several decision points based on this situation, one at a time in a randomized order. Read each step carefully and choose the safest action — you'll get feedback after every decision.",
+                        style: TextStyle(color: AppColors.textMuted, height: 1.4, fontSize: 13),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: _starting ? null : _beginSimulation,
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                        ),
+                        child: _starting
+                            ? const SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(strokeWidth: 2),
+                              )
+                            : const Text('Start Mission'),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
