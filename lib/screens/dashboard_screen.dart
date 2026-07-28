@@ -172,12 +172,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               progress: progressPct,
                               onStart: () => context.go('/scenarios${recommended != null ? '/${recommended.id}/play' : ''}'),
                             ),
-                            const SizedBox(height: 14),
-                            _LearningPathCard(
-                              completed: completed,
-                              total: totalScenarios,
-                              activeScenario: recommended?.title ?? 'No active scenarios',
-                            ),
                           ],
                         ),
                       ),
@@ -197,12 +191,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       scenario: recommended,
                       progress: progressPct,
                       onStart: () => context.go('/scenarios'),
-                    ),
-                    const SizedBox(height: 14),
-                    _LearningPathCard(
-                      completed: completed,
-                      total: totalScenarios,
-                      activeScenario: recommended?.title ?? 'No active scenarios',
                     ),
                     const SizedBox(height: 14),
                     _BadgePreviewRail(
@@ -382,139 +370,6 @@ class _RecommendedMissionCard extends StatelessWidget {
                 SizedBox(width: 10),
                 Icon(Icons.chevron_right),
               ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _LearningPathCard extends StatelessWidget {
-  const _LearningPathCard({
-    required this.completed,
-    required this.total,
-    required this.activeScenario,
-  });
-
-  final int completed;
-  final int total;
-  final String activeScenario;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Text(
-                'Overall Learning Path',
-                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18, color: AppColors.text),
-              ),
-              const Spacer(),
-              TextButton(onPressed: () {}, child: const Text('View Roadmap')),
-            ],
-          ),
-          const SizedBox(height: 8),
-          _PathRow(
-            done: completed > 0,
-            active: completed == 0,
-            tag: 'BASIC TRAINING',
-            title: 'Security Fundamentals 101',
-            meta: completed > 0 ? 'Completed' : '',
-          ),
-          const SizedBox(height: 10),
-          _PathRow(
-            done: false,
-            active: true,
-            tag: 'ACTIVE MISSION',
-            title: activeScenario,
-            meta: 'Estimated: 15 min',
-          ),
-          const SizedBox(height: 10),
-          _PathRow(
-            done: false,
-            active: false,
-            tag: 'UNLOCKS AT NEXT',
-            title: total > 0 && completed >= total ? 'Threat Hunting Review' : 'Encryption & Cryptography',
-            meta: '',
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _PathRow extends StatelessWidget {
-  const _PathRow({
-    required this.done,
-    required this.active,
-    required this.tag,
-    required this.title,
-    required this.meta,
-  });
-
-  final bool done;
-  final bool active;
-  final String tag;
-  final String title;
-  final String meta;
-
-  @override
-  Widget build(BuildContext context) {
-    final dot = done
-        ? const Color(0xFFAEEA94)
-        : active
-            ? const Color(0xFFAFC5FF)
-            : AppColors.border;
-    return Opacity(
-      opacity: active || done ? 1 : 0.5,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 28,
-            height: 28,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: dot.withValues(alpha: 0.16),
-              border: Border.all(color: dot.withValues(alpha: 0.75)),
-            ),
-            child: Icon(done ? Icons.check : Icons.rocket_launch_outlined, size: 14, color: dot),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: AppColors.surface2,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: AppColors.border),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(tag, style: TextStyle(color: AppColors.textMuted, fontSize: 10)),
-                        const SizedBox(height: 4),
-                        Text(title, style: TextStyle(fontWeight: FontWeight.w700, color: AppColors.text)),
-                      ],
-                    ),
-                  ),
-                  if (meta.isNotEmpty) Text(meta, style: TextStyle(color: AppColors.textMuted, fontSize: 11)),
-                ],
-              ),
             ),
           ),
         ],
