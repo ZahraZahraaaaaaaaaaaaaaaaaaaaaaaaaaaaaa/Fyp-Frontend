@@ -64,7 +64,7 @@ class BadgeCatalog {
     BadgeDefinition(
       id: firstScenario,
       name: 'First Scenario Completed',
-      description: 'You finished your first simulation.',
+      description: 'You finished your first scenario.',
       condition: 'Complete your first scenario.',
       icon: Icons.verified_outlined,
       faceGradient: [Color(0xFF172554), Color(0xFF2B6CFF)],
@@ -162,7 +162,7 @@ class BadgeCatalog {
     BadgeDefinition(
       id: scenarioMaster,
       name: 'Scenario Master',
-      description: 'You built broad awareness across multiple simulations.',
+      description: 'You built broad awareness across multiple scenarios.',
       condition: 'Complete 5 scenarios.',
       icon: Icons.auto_awesome_outlined,
       faceGradient: [Color(0xFF0B1220), Color(0xFF60A5FA)],
